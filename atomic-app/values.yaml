@@ -14,11 +14,15 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-rails:
+configSecret: ""
+app:
   pumaThreads: 5:5
   pumaWorkers: 2
+  extraArgs: []
+
+worker:
   queWorkers: 2
-  configSecret: ""
+  extraArgs: []
 
 serviceAccount:
   # Specifies whether a service account should be created

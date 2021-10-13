@@ -36,7 +36,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["puma", "-t", "{{ .Values.rails.pumaThreads }}", "-w", "{{ .Values.rails.pumaWorkers }}", "--preload"]
+          command: 
+            - puma
+            - -t
+            - {{ .Values.app.pumaThreads }}
+            - -w
+            - {{ .Values.app.pumaWorkers }}
+            - --preload
+            {{- range .Values.app.extraArgs }}
+            - {{ . }}
+            {{- end }}
           volumeMounts:
             - name: secrets
               mountPath: /app/config/k8s
@@ -69,7 +78,7 @@ spec:
       volumes:
         - name: secrets
           secret:
-            secretName: {{ .Values.rails.configSecret }}
+            secretName: {{ .Values.configSecret }}
         {{- if .Values.persistence.enabled }}
         - name: shared
           persistentVolumeClaim:
