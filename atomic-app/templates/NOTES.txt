@@ -22,7 +22,7 @@
 {{- end }}
 2. Status
   kubectl -n {{ .Release.Namespace }} get all -l app.kubernetes.io/name={{ include "app.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
-2. Migration Logs
+3. Migration Logs
   kubectl -n {{ .Release.Namespace }} logs job/{{ .Release.Name }}-migrations
-3. App Logs
+4. App Logs
   kubectl -n {{ .Release.Namespace }} logs deployment/{{ .Release.Name }}-app

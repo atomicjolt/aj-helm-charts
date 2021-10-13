@@ -40,10 +40,10 @@ spec:
           volumeMounts:
             - name: secrets
               mountPath: /app/config/k8s
-          {{- if .Values.persistence.enabled -}}
+          {{- if .Values.persistence.enabled }}
             - name: shared
               mountPath: /shared
-          {{- end}}
+          {{- end }}
           ports:
             - name: rails
               containerPort: 3000
@@ -70,11 +70,11 @@ spec:
         - name: secrets
           secret:
             secretName: {{ .Values.rails.configSecret }}
-        {{- if .Values.persistence.enabled -}}
+        {{- if .Values.persistence.enabled }}
         - name: shared
           persistentVolumeClaim:
             claimName: {{ template "app.fullname" . }}
-        {{- end}}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
