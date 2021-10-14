@@ -59,10 +59,15 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /readiness
               port: 3000
               scheme: HTTP
             failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 3000
+              scheme: HTTP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       initContainers:
