@@ -39,7 +39,7 @@ spec:
           command:
             - que
             - --worker-count
-            - {{ .Values.worker.queWorkers }}
+            - "{{ .Values.worker.queWorkers }}"
             {{- range .Values.app.extraArgs }}
             - {{ . }}
             {{- end }}
