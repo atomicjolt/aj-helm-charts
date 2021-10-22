@@ -43,7 +43,7 @@ spec:
             {{- range .Values.worker.extraArgs }}
             - "{{ . }}"
             {{- end }}
-            - ./config/environment.rb
+            - ./config/environment_que.rb
           volumeMounts:
             - name: secrets
               mountPath: /app/config/k8s
@@ -53,6 +53,9 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: PROMETHEUS_EXPORTER_PORT
+              value: "9394"
       initContainers:
         - name: check-migrations
           securityContext:
