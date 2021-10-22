@@ -1,20 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.service.name }}
+  name: {{ .Values.service.name }}-worker
   labels:
     {{- include "app.labels" . | nindent 4 }}
+    type: metrics
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: 3000
-      protocol: TCP
-      name: rails
     - port: 9394
       targetPort: 9394
       protocol: TCP
       name: metrics
   selector:
     {{- include "app.selectorLabels" . | nindent 4 }}
-    type: app
+    type: worker

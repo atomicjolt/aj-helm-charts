@@ -92,6 +92,12 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+metrics:
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    scrapeInterval: 30s
+
 nodeSelector: {}
 
 tolerations: []
