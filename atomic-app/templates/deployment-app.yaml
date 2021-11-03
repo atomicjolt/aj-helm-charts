@@ -7,7 +7,7 @@ metadata:
     {{- include "app.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.app.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -44,7 +44,7 @@ spec:
             - "{{ .Values.app.pumaWorkers }}"
             - --preload
             {{- range .Values.app.extraArgs }}
-            - {{ . }}
+            - "{{ . }}"
             {{- end }}
           volumeMounts:
             - name: secrets
