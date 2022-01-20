@@ -39,7 +39,7 @@ spec:
             - name: secrets
               mountPath: /app/config/k8s
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.worker.resources | nindent 12 }}
       volumes:
         - name: secrets
           secret:
