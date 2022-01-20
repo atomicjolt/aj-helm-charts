@@ -30,6 +30,7 @@ spec:
       serviceAccountName: {{ include "app.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
       containers:
         - name: rails
           securityContext:
@@ -70,8 +71,10 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 20
+          lifecycle:
+            {{- toYaml .Values.app.lifecycle | nindent 12 }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.app.resources | nindent 12 }}
       initContainers:
         - name: check-migrations
           securityContext:

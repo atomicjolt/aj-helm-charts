@@ -30,6 +30,7 @@ spec:
       serviceAccountName: {{ include "app.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
       containers:
         - name: rails
           securityContext:
@@ -51,8 +52,10 @@ spec:
             - name: shared
               mountPath: /shared
             {{- end }}
+          lifecycle:
+            {{- toYaml .Values.worker.lifecycle | nindent 12 }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.worker.resources | nindent 12 }}
           env:
             - name: PROMETHEUS_EXPORTER_PORT
               value: "9394"
