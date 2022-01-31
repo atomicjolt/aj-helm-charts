@@ -18,7 +18,7 @@ app:
   pumaThreads: 5:5
   pumaWorkers: 2
   extraArgs: []
-  terminationGracePeriodSeconds: 75
+  terminationGracePeriodSeconds: 140
   lifecycle: {}
   resources: {}
     # limits:
