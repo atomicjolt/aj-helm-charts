@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "atomic-canvas.fullname" . }}-app
+  name: {{ include "canvas.fullname" . }}-worker
   labels:
-    type: app-server
-    {{- include "atomic-canvas.labels" . | nindent 4 }}
+    type: worker
+    {{- include "canvas.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.app.replicaCount }}
+  replicas: {{ .Values.worker.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "atomic-canvas.selectorLabels" . | nindent 6 }}
-      type: app
+      {{- include "canvas.selectorLabels" . | nindent 6 }}
+      type: worker
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -20,46 +20,43 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "atomic-canvas.selectorLabels" . | nindent 8 }}
-        type: app
+        {{- include "canvas.selectorLabels" . | nindent 8 }}
+        type: worker
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "atomic-canvas.serviceAccountName" . }}
+      serviceAccountName: {{ include "canvas.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
       containers:
         - name: rails
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: 
+            - script/canvas_init
+            - run
+            {{- range .Values.worker.extraArgs }}
+            - "{{ . }}"
+            {{- end }}
           volumeMounts:
             - name: secrets
               mountPath: /secrets
             - name: shared
               mountPath: /shared
-          ports:
-            - name: rails
-              containerPort: 8080
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /health_check
-              port: 8080
-              scheme: HTTP
           env:
             {{- if .Values.metrics.prometheusExporter.enabled }}
             - name: STATSD_ENABLE
               value: "1"
             {{- end }}
           lifecycle:
-            {{- toYaml .Values.app.lifecycle | nindent 12 }}
+            {{- toYaml .Values.worker.lifecycle | nindent 12 }}
           resources:
-            {{- toYaml .Values.app.resources | nindent 12 }}
+            {{- toYaml .Values.worker.resources | nindent 12 }}
         {{- if .Values.metrics.prometheusExporter.enabled }}
         - name: prometheus-exporter
           image: "{{ .Values.metrics.prometheusExporter.repository }}:{{ .Values.metrics.prometheusExporter.tag }}"
@@ -86,11 +83,11 @@ spec:
             secretName: {{ .Values.configSecret }}
         - name: shared
           persistentVolumeClaim:
-            claimName: {{ template "atomic-canvas.fullname" . }}
+            claimName: {{ template "canvas.fullname" . }}
         {{- if .Values.metrics.prometheusExporter.enabled }}
         - name: stats-exporter-mapping-config
           configMap:
-            name: {{ include "atomic-canvas.fullname" . }}-exporter-config
+            name: {{ include "canvas.fullname" . }}-exporter-config
             items:
             - key: exporterConfiguration
               path: mapping-config.yaml

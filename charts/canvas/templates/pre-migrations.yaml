@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "atomic-canvas.fullname" . }}-pre-migrations
+  name: {{ include "canvas.fullname" . }}-pre-migrations
   labels:
     type: migrations
-    {{- include "atomic-canvas.labels" . | nindent 4 }}
+    {{- include "canvas.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade,post-install
     "helm.sh/hook-weight": "-10"
@@ -17,7 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "atomic-canvas.selectorLabels" . | nindent 8 }}
+        {{- include "canvas.selectorLabels" . | nindent 8 }}
         type: migration
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -51,4 +51,4 @@ spec:
             secretName: {{ .Values.configSecret }}
         - name: shared
           persistentVolumeClaim:
-            claimName: {{ template "atomic-canvas.fullname" . }}
+            claimName: {{ template "canvas.fullname" . }}

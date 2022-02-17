@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ template "atomic-canvas.fullname" . }}
+  name: {{ template "canvas.fullname" . }}
   labels:
-    {{- include "atomic-canvas.labels" . | nindent 4 }}
+    {{- include "canvas.labels" . | nindent 4 }}
   annotations:
     "helm.sh/resource-policy": keep
   {{- with .Values.persistence.annotations  }}

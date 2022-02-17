@@ -2,9 +2,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "atomic-canvas.fullname" . }}-app
+  name: {{ include "canvas.fullname" . }}-app
   labels:
-    {{- include "atomic-canvas.labels" . | nindent 4 }}
+    {{- include "canvas.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller
   {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
@@ -12,7 +12,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-    {{- include "atomic-canvas.selectorLabels" . | nindent 6 }}
+    {{- include "canvas.selectorLabels" . | nindent 6 }}
   endpoints:
     - port: metrics
       interval: {{ .Values.metrics.serviceMonitor.scrapeInterval }}

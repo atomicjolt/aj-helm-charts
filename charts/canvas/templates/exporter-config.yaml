@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: '{{ include "atomic-canvas.fullname" . }}-exporter-config'
+  name: '{{ include "canvas.fullname" . }}-exporter-config'
   labels:
-    app.kubernetes.io/name: {{ include "atomic-canvas.name" . }}
-    {{- include "atomic-canvas.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "canvas.name" . }}
+    {{- include "canvas.labels" . | nindent 4 }}
 data:
   exporterConfiguration:
 {{- if .Values.metrics.prometheusExporter.configuration }} |
