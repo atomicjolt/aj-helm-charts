@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "atomic-canvas.fullname" . }}-pre-migrations
+  labels:
+    type: migrations
+    {{- include "atomic-canvas.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade,post-install
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "atomic-canvas.selectorLabels" . | nindent 8 }}
+        type: migration
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      restartPolicy: Never
+      containers:
+        - name: rails
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.preDeployTag | default .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: 
+            - bash
+            - -c
+            - "cp -r public/dist/brandable_css.dist/. public/dist/brandable_css \
+              && bundle exec rake db:migrate:tagged[predeploy]"
+          volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+            - name: shared
+              mountPath: /shared
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ .Values.configSecret }}
+        - name: shared
+          persistentVolumeClaim:
+            claimName: {{ template "atomic-canvas.fullname" . }}
