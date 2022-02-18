@@ -21,10 +21,15 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "2021-09-01.25"
+# For Canvas we're using the same chart for a range of Canvas versions, so this is intentionally not a canvas version
+appVersion: 0.1.0
 
 dependencies:
   - name: redis
     version: 16.4.0
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
+  - name: canvas-rce-api
+    version: 0.1.0
+    repository: file://../canvas-rce-api
+    condition: canvas-rce-api.enabled

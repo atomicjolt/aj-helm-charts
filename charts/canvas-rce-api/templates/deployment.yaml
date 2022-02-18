@@ -33,20 +33,51 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: secrets
+              mountPath: /secrets
           ports:
-            - name: http
-              containerPort: 80
+            - name: node
+              containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: 8080
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.metrics.prometheusExporter.enabled }}
+        - name: prometheus-exporter
+          image: "{{ .Values.metrics.prometheusExporter.repository }}:{{ .Values.metrics.prometheusExporter.tag }}"
+          imagePullPolicy: {{ .Values.metrics.prometheusExporter.pullPolicy }}
+          ports:
+            - name: metrics
+              containerPort: 9394
+            - name: listener
+              containerPort: 8125
+          args:
+            - --statsd.listen-udp=:8125
+            - --web.listen-address=:9394
+            - --statsd.mapping-config=/statsd-exporter/mapping-config.yaml
+          volumeMounts:
+            - name: stats-exporter-mapping-config
+              mountPath: /statsd-exporter/
+              readOnly: true
+          resources:
+            {{- toYaml .Values.metrics.prometheusExporter.resources | nindent 12 }}
+        {{- end }}
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ .Values.configSecret }}
+        {{- if .Values.metrics.prometheusExporter.enabled }}
+        - name: stats-exporter-mapping-config
+          configMap:
+            name: {{ include "canvas-rce-api.fullname" . }}-exporter-config
+            items:
+            - key: exporterConfiguration
+              path: mapping-config.yaml
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

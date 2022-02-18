@@ -21,4 +21,5 @@ version: 0.1.0
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "release-1.18"
+# The same chart will work for a range of images, so not using a real image tag here.
+appVersion: 0.1.0
