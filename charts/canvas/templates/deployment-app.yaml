@@ -44,12 +44,12 @@ spec:
               mountPath: /shared
           ports:
             - name: rails
-              containerPort: 8080
+              containerPort: 3000
               protocol: TCP
           readinessProbe:
             httpGet:
               path: /health_check
-              port: 8080
+              port: 3000
               scheme: HTTP
           env:
             {{- if .Values.metrics.prometheusExporter.enabled }}
