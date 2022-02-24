@@ -9,9 +9,6 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   namespace: {{ .Release.Namespace }}
-  annotations:
-    helm.sh/hook: "post-upgrade, post-install"
-    helm.sh/hook-delete-policy: "before-hook-creation"
 spec:
 {{- if .Values.app.podDisruptionBudget.minAvailable }}
   minAvailable: {{ .Values.app.podDisruptionBudget.minAvailable }}
