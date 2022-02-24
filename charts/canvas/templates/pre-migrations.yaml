@@ -44,7 +44,7 @@ spec:
             - name: shared
               mountPath: /shared
           resources:
-            {{- toYaml .Values.worker.resources | nindent 12 }}
+            {{- toYaml .Values.migration.resources | nindent 12 }}
       volumes:
         - name: secrets
           secret:

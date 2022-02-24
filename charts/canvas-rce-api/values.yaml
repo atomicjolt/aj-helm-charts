@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: canvas-rce-api
+  repository: public.ecr.aws/atomicjolt/canvas-rce-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   #tag: latest 
