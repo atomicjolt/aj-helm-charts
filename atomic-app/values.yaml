@@ -34,6 +34,13 @@ app:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
+ 
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
 
 worker:
@@ -57,6 +64,13 @@ worker:
     #   cpu: 100m
     #   memory: 128Mi
 
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -78,6 +92,12 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+topologySpreadConstraint:
+  enabled: false
+  maxSkew: 1
+  topologyKey: kubernetes.io/hostname
+  whenUnsatisfiable: DoNotSchedule
 
 service:
   type: ClusterIP
@@ -106,12 +126,6 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 metrics:
   serviceMonitor:
@@ -133,3 +147,20 @@ persistence:
   finalizers:
     - kubernetes.io/pvc-protection
   # selectorLabels: {}
+
+scheduledScaling:
+  # requires autoscaler to be enabled
+  # all times are UTC
+  enabled: false
+  image:
+    repository: bitnami/kubectl
+    tag: 1.22
+  cronjobs: []
+    # - name: scale-up
+    #   schedule: "0 11 * * 1-5"
+    #   workerMinReplicas: 1
+    #   appMinReplicas: 2
+    # - name: scale-down
+    #   schedule: "0 23 * * 1-5"
+    #   workerMinReplicas: 1
+    #   appMinReplicas: 1

@@ -6,7 +6,7 @@ metadata:
     type: app-server
     {{- include "app.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not .Values.app.autoscaling.enabled }}
   replicas: {{ .Values.app.replicaCount }}
   {{- end }}
   selector:
@@ -99,4 +99,15 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- if .Values.topologySpreadConstraint.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraint.maxSkew }}
+          topologyKey: {{ .Values.topologySpreadConstraint.topologyKey }}
+          whenUnsatisfiable: {{ .Values.topologySpreadConstraint.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              {{- include "app.selectorLabels" . | nindent 14 }}
+              type: app
       {{- end }}
