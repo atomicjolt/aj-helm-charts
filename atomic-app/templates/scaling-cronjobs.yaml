@@ -14,7 +14,7 @@ spec:
     spec:
       template:
         spec:
-          serviceAccountName: scheduled-scaler
+          serviceAccountName: {{ template "app.fullname" $top }}-scaler
           restartPolicy: OnFailure
           containers:
           {{- if $cronjob.appMinReplicas }}
