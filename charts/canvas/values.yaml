@@ -204,6 +204,14 @@ canvas-rce-api:
 redis:
   enabled: true
   architecture: standalone
+
+  commonConfiguration: |-
+    maxmemory 50mb
+    save ""
+  resources:
+    requests:
+      memory: 100Mi
+
   auth:
     sentinel: false
     existingSecret: redis

@@ -37,7 +37,8 @@ spec:
             - bash
             - -c
             - "cp -r public/dist/brandable_css.dist/. public/dist/brandable_css \
-              && bundle exec rake db:migrate:tagged[predeploy]"
+              && bundle exec rake db:migrate:tagged[predeploy] \
+              && bundle exec rake brand_configs:generate_and_upload_all"
           volumeMounts:
             - name: secrets
               mountPath: /secrets
