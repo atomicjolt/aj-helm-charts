@@ -50,6 +50,8 @@ spec:
           volumeMounts:
             - name: secrets
               mountPath: /app/config/k8s
+            - name: credentials
+              mountPath: /app/config/credentials
           {{- if .Values.persistence.enabled }}
             - name: shared
               mountPath: /shared
@@ -83,6 +85,9 @@ spec:
         - name: secrets
           secret:
             secretName: {{ .Values.configSecret }}
+        - name: credentials
+          secret:
+            secretName: {{ .Values.credentialsSecret }}
         {{- if .Values.persistence.enabled }}
         - name: shared
           persistentVolumeClaim:

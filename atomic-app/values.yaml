@@ -13,6 +13,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 configSecret: ""
+credentialsSecret: ""
 app:
   replicaCount: 1
   pumaThreads: 5:5
