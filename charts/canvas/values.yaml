@@ -208,9 +208,6 @@ redis:
   commonConfiguration: |-
     maxmemory 50mb
     save ""
-  resources:
-    requests:
-      memory: 100Mi
 
   auth:
     sentinel: false
@@ -218,6 +215,11 @@ redis:
     existingSecretPasswordKey: redis-password
     usePasswordFiles: true
   master:
+    resources:
+      requests:
+        memory: 100Mi
+      limits:
+        memory: 200Mi
     disableCommands:
       # TODO
     persistence:
