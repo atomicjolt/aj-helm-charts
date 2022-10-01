@@ -1,0 +1,9 @@
+dependencies:
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.4.0
+- name: canvas-rce-api
+  repository: file://../canvas-rce-api
+  version: 0.1.0
+digest: sha256:d3074c9368e06ea61454ff705db27aba8b86d76ad63fc5391074f3d79fac812c
+generated: "2022-02-18T09:28:09.990048442-05:00"

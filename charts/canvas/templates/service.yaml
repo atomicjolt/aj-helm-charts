@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "canvas.fullname" . }}
+  labels:
+    {{- include "canvas.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 3000
+      protocol: TCP
+      name: rails
+    - port: 9394
+      targetPort: 9394
+      protocol: TCP
+      name: metrics
+  selector:
+    {{- include "canvas.selectorLabels" . | nindent 4 }}
+    type: app
