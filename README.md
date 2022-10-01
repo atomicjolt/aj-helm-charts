@@ -37,6 +37,7 @@ Then build the chart file
 cd ../repo
 helm package ../chart_name
 curl -O https://atomicjolt-helm-charts.s3.amazonaws.com/index.yaml
-helm repo index --merge index.yaml
-aws s3 cp --recursive . s3://atomicjolt-helm-charts/
+helm repo index --merge index.yaml .
+aws s3 cp index.yaml s3://atomicjolt-helm-charts/
+aws s3 cp chart_name-1.0.0.tgz s3://atomicjolt-helm-charts/
 ```
