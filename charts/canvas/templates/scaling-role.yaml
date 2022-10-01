@@ -1,0 +1,22 @@
+{{- if .Values.scheduledScaling.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "canvas.fullname" . }}-scaler
+  labels:
+    {{- include "canvas.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - create
+      - delete
+      - update
+      - patch
+      - watch
+      - list
+      - get
+{{- end }}

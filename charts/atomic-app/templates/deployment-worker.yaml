@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}-worker
+  labels:
+    type: worker
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.worker.autoscaling.enabled }}
+  replicas: {{ .Values.worker.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+      type: worker
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+        type: worker
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
+      containers:
+        - name: rails
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - que
+            - --worker-count
+            - "{{ .Values.worker.queWorkers }}"
+            {{- range .Values.worker.extraArgs }}
+            - "{{ . }}"
+            {{- end }}
+            - ./config/environment_que.rb
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/config/k8s
+            - name: credentials
+              mountPath: /app/config/credentials
+            {{- if .Values.persistence.enabled }}
+            - name: shared
+              mountPath: /shared
+            {{- end }}
+          lifecycle:
+            {{- toYaml .Values.worker.lifecycle | nindent 12 }}
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          env:
+            - name: PROMETHEUS_EXPORTER_PORT
+              value: "9394"
+      initContainers:
+        - name: check-migrations
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["rake", "db:abort_if_pending_migrations"]
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/config/k8s
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ .Values.configSecret }}
+        - name: credentials
+          secret:
+            secretName: {{ .Values.credentialsSecret }}
+        {{- if .Values.persistence.enabled }}
+        - name: shared
+          persistentVolumeClaim:
+            claimName: {{ template "app.fullname" . }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      
+      {{- if .Values.topologySpreadConstraint.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraint.maxSkew }}
+          topologyKey: {{ .Values.topologySpreadConstraint.topologyKey }}
+          whenUnsatisfiable: {{ .Values.topologySpreadConstraint.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              {{- include "app.selectorLabels" . | nindent 14 }}
+              type: worker
+      {{- end }}

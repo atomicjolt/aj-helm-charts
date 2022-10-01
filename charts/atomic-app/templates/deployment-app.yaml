@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}-app
+  labels:
+    type: app-server
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.app.autoscaling.enabled }}
+  replicas: {{ .Values.app.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+      type: app
+  template:
+    metadata:
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+        type: app
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
+      containers:
+        - name: rails
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: 
+            - puma
+            - -t
+            - "{{ .Values.app.pumaThreads }}"
+            - -w
+            - "{{ .Values.app.pumaWorkers }}"
+            - --preload
+            {{- range .Values.app.extraArgs }}
+            - "{{ . }}"
+            {{- end }}
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/config/k8s
+            - name: credentials
+              mountPath: /app/config/credentials
+          {{- if .Values.persistence.enabled }}
+            - name: shared
+              mountPath: /shared
+          {{- end }}
+          ports:
+            - name: rails
+              containerPort: 3000
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 3000
+              scheme: HTTP
+            failureThreshold: 1
+            timeoutSeconds: 10
+          lifecycle:
+            {{- toYaml .Values.app.lifecycle | nindent 12 }}
+          resources:
+            {{- toYaml .Values.app.resources | nindent 12 }}
+      initContainers:
+        - name: check-migrations
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["rake", "db:abort_if_pending_migrations"]
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/config/k8s
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ .Values.configSecret }}
+        - name: credentials
+          secret:
+            secretName: {{ .Values.credentialsSecret }}
+        {{- if .Values.persistence.enabled }}
+        - name: shared
+          persistentVolumeClaim:
+            claimName: {{ template "app.fullname" . }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- if .Values.topologySpreadConstraint.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraint.maxSkew }}
+          topologyKey: {{ .Values.topologySpreadConstraint.topologyKey }}
+          whenUnsatisfiable: {{ .Values.topologySpreadConstraint.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              {{- include "app.selectorLabels" . | nindent 14 }}
+              type: app
+      {{- end }}

@@ -1,0 +1,15 @@
+{{- if .Values.metrics.prometheusExporter.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: '{{ include "canvas-rce-api.fullname" . }}-exporter-config'
+  labels:
+    app.kubernetes.io/name: {{ include "canvas-rce-api.name" . }}
+    {{- include "canvas-rce-api.labels" . | nindent 4 }}
+data:
+  exporterConfiguration:
+{{- if .Values.metrics.prometheusExporter.configuration }} |
+    {{- .Values.metrics.prometheusExporter.configuration | nindent 4 }}
+{{- else }} ''
+{{- end }}
+{{- end }}
