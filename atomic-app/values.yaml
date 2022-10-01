@@ -172,9 +172,6 @@ redis:
   commonConfiguration: |-
     maxmemory 50mb
     save ""
-  resources:
-    requests:
-      memory: 100Mi
   auth:
     sentinel: false
     existingSecret: redis
@@ -183,6 +180,11 @@ redis:
   master:
     persistence:
       enabled: false
+    resources:
+      requests:
+        memory: 100Mi
+      limits:
+        memory: 200Mi
   replica:
     replicaCount: 0
     disableCommands:
