@@ -1,0 +1,17 @@
+{{- if .Values.scheduledScaling.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "canvas.fullname" . }}-scaler
+  labels:
+    {{- include "canvas.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "canvas.fullname" . }}-scaler
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "canvas.fullname" . }}-scaler
+    namespace: {{ .Release.Namespace }}
+{{- end }}

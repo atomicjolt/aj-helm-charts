@@ -1,0 +1,196 @@
+# Default values for atomic-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: app
+  # pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+configSecret: ""
+credentialsSecret: ""
+app:
+  replicaCount: 1
+  pumaThreads: 5:5
+  pumaWorkers: 2
+  extraArgs: []
+  terminationGracePeriodSeconds: 75
+
+  podDisruptionBudget:
+    enabled: false
+    # minAvailable: 1
+    # maxUnavailable: 1
+    labels: {}
+
+  lifecycle: {}
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+ 
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+
+worker:
+  replicaCount: 1
+  queWorkers: 2
+  extraArgs: []
+  terminationGracePeriodSeconds: 30
+  
+  podDisruptionBudget:
+    enabled: false
+    # minAvailable: "1"
+    # maxUnavailable: "1"
+    labels: {}
+
+  lifecycle: {}
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  autoscaling:
+    enabled: false
+    # minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+topologySpreadConstraint:
+  enabled: false
+  maxSkew: 1
+  topologyKey: kubernetes.io/hostname
+  whenUnsatisfiable: DoNotSchedule
+
+service:
+  type: ClusterIP
+  name: app
+  port: 80
+
+ingress:
+  enabled: false
+  #ingressClassName: alb
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  rules: []
+  #  - host: learnosityconnector.atomicjolt.xyz
+  #    http:
+  #      paths:
+  #      - path: /
+  #        pathType: Prefix
+  #        backend:
+  #          service:
+  #            name: app
+  #            port:
+  #              number: 80
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+metrics:
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    scrapeInterval: 30s
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+persistence:
+  enabled: false
+  # storageClassName: default
+  size: 10Gi
+  # annotations: {}
+  finalizers:
+    - kubernetes.io/pvc-protection
+  # selectorLabels: {}
+
+scheduledScaling:
+  # requires autoscaler to be enabled
+  # all times are UTC
+  enabled: false
+  image:
+    repository: bitnami/kubectl
+    tag: 1.22
+  cronjobs: []
+    # - name: scale-up
+    #   schedule: "0 11 * * 1-5"
+    #   workerMinReplicas: 1
+    #   appMinReplicas: 2
+    # - name: scale-down
+    #   schedule: "0 23 * * 1-5"
+    #   workerMinReplicas: 1
+    #   appMinReplicas: 1
+
+redis:
+  enabled: false
+  architecture: standalone
+  commonConfiguration: |-
+    maxmemory 50mb
+    save ""
+  auth:
+    sentinel: false
+    existingSecret: redis
+    existingSecretPasswordKey: redis-password
+    usePasswordFiles: true
+  master:
+    persistence:
+      enabled: false
+    resources:
+      requests:
+        memory: 100Mi
+      limits:
+        memory: 200Mi
+  replica:
+    replicaCount: 0
+    disableCommands:
+    persistence:
+      enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

@@ -1,0 +1,23 @@
+{{- if .Values.worker.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "app.fullname" . }}-worker
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  {{- with .Values.worker.podDisruptionBudget.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- if .Values.worker.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.worker.podDisruptionBudget.minAvailable }}
+{{- end }}
+{{- if .Values.worker.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.worker.podDisruptionBudget.maxUnavailable }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+      type: worker
+{{- end }}

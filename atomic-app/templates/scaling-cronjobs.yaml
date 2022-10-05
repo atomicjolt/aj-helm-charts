@@ -1,0 +1,42 @@
+{{- if .Values.scheduledScaling.enabled -}}
+{{- $top := . -}}
+{{- range $cronjob := .Values.scheduledScaling.cronjobs -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "app.fullname" $top }}-{{ $cronjob.name }}
+  labels:
+    {{- include "app.labels" $top | nindent 4 }}
+  namespace: {{ $top.Release.Namespace }}
+spec:
+  schedule: "{{ $cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ template "app.fullname" $top }}-scaler
+          restartPolicy: OnFailure
+          containers:
+          {{- if $cronjob.appMinReplicas }}
+          - name: kubectl-app
+            image: "{{ $top.Values.scheduledScaling.image.repository }}:{{ $top.Values.scheduledScaling.image.tag }}"
+            args:
+            - patch
+            - hpa
+            - {{ template "app.fullname" $top }}-app
+            - --patch
+            - '{"spec":{"minReplicas":{{ $cronjob.appMinReplicas }}}}'
+          {{- end }}
+          {{- if $cronjob.workerMinReplicas }}
+          - name: kubectl-worker
+            image: "{{ $top.Values.scheduledScaling.image.repository }}:{{ $top.Values.scheduledScaling.image.tag }}"
+            args:
+            - patch
+            - hpa
+            - {{ template "app.fullname" $top }}-worker
+            - --patch
+            - '{"spec":{"minReplicas":{{ $cronjob.workerMinReplicas }}}}'
+          {{- end }}
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,19 @@
+{{- if and ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) .Values.metrics.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "canvas-rce-api.fullname" . }}-app
+  labels:
+    {{- include "canvas-rce-api.labels" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+  {{- if .Values.metrics.serviceMonitor.additionalLabels }}
+    {{- toYaml .Values.metrics.serviceMonitor.additionalLabels | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+    {{- include "canvas-rce-api.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: metrics
+      interval: {{ .Values.metrics.serviceMonitor.scrapeInterval }}
+{{- end }}
