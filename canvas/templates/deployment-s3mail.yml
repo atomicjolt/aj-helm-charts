@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "canvas.fullname" . }}-s3mail
+  labels:
+    type: s3mail
+    {{- include "canvas.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "canvas.selectorLabels" . | nindent 6 }}
+      type: s3mail
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "canvas.selectorLabels" . | nindent 8 }}
+        type: s3mail
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "s3mail.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.s3mail.terminationGracePeriodSeconds }}
+      containers:
+        - name: s3mail
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.s3mail.image.repository }}:{{ .Values.s3mail.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - |
+              set -e && while true; do
+                 echo "$(date) - Moving mail from s3";
+                 aws s3 mv --recursive s3://{{ .Values.s3mail.sesBucket}}/incoming_mail/ /shared/tmpmail/;
+                 [ -n "$(ls /shared/tmpmail/)" ] && mv -v /shared/tmpmail/* /shared/mail;
+                 sleep 60;
+              done
+          volumeMounts:
+            - name: shared
+              mountPath: /shared
+          lifecycle:
+            {{- toYaml .Values.s3mail.lifecycle | nindent 12 }}
+          resources:
+            {{- toYaml .Values.s3mail.resources | nindent 12 }}
+      volumes:
+        - name: shared
+          persistentVolumeClaim:
+            claimName: {{ template "canvas.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
