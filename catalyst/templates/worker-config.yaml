@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalyst-worker-config
+data:
+  specific.toml: |
+    [catalyst]
+    run_scheduler = true
+    run_slow_jobs = false
+    run_regular_jobs = true
+    connect_cluster = true

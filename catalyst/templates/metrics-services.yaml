@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalyst-workers
+  labels:
+    metrics: catalyst
+spec:
+  selector:
+    app: catalyst-worker
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 4080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalyst-lead-workers
+  labels:
+    metrics: catalyst
+spec:
+  selector:
+    app: catalyst-lead-worker
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 4080

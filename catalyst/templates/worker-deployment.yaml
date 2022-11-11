@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalyst-worker
+  labels:
+    app: catalyst-worker
+spec:
+  replicas: {{ .Values.workerReplicaCount }}
+  selector:
+    matchLabels:
+      app: catalyst-worker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: catalyst-worker
+        cluster: catalyst-workers
+{{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
+    spec:
+      containers:
+      - name: catalyst
+        image: {{ .Values.image }}
+        env:
+          - name: REPLACE_OS_VARS
+            value: "true"
+          - name: ERLANG_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+        resources:
+{{ .Values.workerResources | toYaml | indent 10 }}
+
+{{ if .Values.workerNodeSelector }}
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "{{ .Values.workerNodeSelector }}"
+        effect: "NoSchedule"
+      nodeSelector:
+        type: "{{ .Values.workerNodeSelector }}"
+{{ end }}
+      initContainers:
+      - name: check-migrations
+        image: {{ .Values.image }}
+        command: ["/opt/catalyst/bin/catalyst", "check_migrations"]
+        env:
+        - name: REPLACE_OS_VARS
+          value: "true"
+        - name: ERLANG_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+      # Workers need to be given enough time to gracefully quit after finishing
+      # current jobs
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: config-volume
+        projected:
+          sources:
+          - secret:
+              name: catalyst-config
+          - configMap:
+              name: catalyst-worker-config

@@ -7,6 +7,7 @@
 | atomic-app     | Ruby on Rails app |
 | canvas         | Canvas LMS deployment |
 | canvas-rce-api | Canvas RCE API |
+| catalyst       | Elixir web server and worker |
 
 The desired container image and other options must be specified in a values files.
 

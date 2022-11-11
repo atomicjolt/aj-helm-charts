@@ -1,0 +1,60 @@
+# The lead worker is only responsible for running the slow jobs, and potentially
+# doing cluster-coordination tasks
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalyst-lead-worker
+  labels:
+    app: catalyst-lead-worker
+spec:
+  # There should only be one
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalyst-lead-worker
+  template:
+    metadata:
+      labels:
+        app: catalyst-lead-worker
+        cluster: catalyst-workers
+{{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
+    spec:
+      containers:
+      - name: catalyst
+        image: {{ .Values.image }}
+        env:
+          - name: REPLACE_OS_VARS
+            value: "true"
+          - name: ERLANG_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+        resources:
+{{ .Values.leadWorkerResources | toYaml | indent 10 }}
+      initContainers:
+      - name: check-migrations
+        image: {{ .Values.image }}
+        command: ["/opt/catalyst/bin/catalyst", "check_migrations"]
+        env:
+        - name: REPLACE_OS_VARS
+          value: "true"
+        - name: ERLANG_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: config-volume
+        projected:
+          sources:
+          - secret:
+              name: catalyst-config
+          - configMap:
+              name: catalyst-lead-worker-config
+
