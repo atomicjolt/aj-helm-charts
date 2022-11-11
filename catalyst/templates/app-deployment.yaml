@@ -27,6 +27,11 @@ spec:
               command:
               - sleep
               - "20"
+        readinessProbe:
+          httpGet:
+            path: /health_check
+            port: 8080
+            scheme: HTTP
         env:
         - name: REPLACE_OS_VARS
           value: "true"
