@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalyst-app-deployment
+  labels:
+    app: catalyst-app
+spec:
+  replicas: {{ .Values.appReplicaCount }}
+  selector:
+    matchLabels:
+      app: catalyst-app
+  template:
+    metadata:
+      labels:
+        app: catalyst-app
+{{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
+    spec:
+      containers:
+      - name: catalyst
+        image: {{ .Values.image }}
+        ports:
+        - containerPort: 8080
+        # helps with 0 downtime deploys
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sleep
+              - "20"
+        readinessProbe:
+          httpGet:
+            path: /health_check
+            port: 8080
+            scheme: HTTP
+        env:
+        - name: REPLACE_OS_VARS
+          value: "true"
+        - name: ERLANG_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+        resources:
+{{ .Values.appResources | toYaml | indent 10 }}
+      initContainers:
+      - name: check-migrations
+        image: {{ .Values.image }}
+        command: ["/opt/catalyst/bin/catalyst", "check_migrations"]
+        env:
+        - name: REPLACE_OS_VARS
+          value: "true"
+        - name: ERLANG_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: config-volume
+          projected:
+            sources:
+            - secret:
+                name: catalyst-config
+            - configMap:
+                name: catalyst-app-config

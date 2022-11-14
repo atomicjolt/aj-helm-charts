@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalyst-app-config
+data:
+  specific.toml: |
+    [phoenix]
+    serve_endpoints = true
+
+    [catalyst]
+    run_scheduler = false
