@@ -1,5 +1,4 @@
 scheduledScaling:
-  # requires autoscaler to be enabled
   # all times are UTC
   enabled: false
   image:
