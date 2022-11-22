@@ -1,0 +1,68 @@
+{{- if .Values.scheduledScaling.enabled -}}
+{{- $top := . -}}
+{{- range $cronjob := .Values.scheduledScaling.cronjobs -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "worker-scaler-{{ $cronjob.name }}"
+  labels:
+    app: catalyst-app
+spec:
+  schedule: "{{ $cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: worker-scaler
+          restartPolicy: OnFailure
+          containers:
+          - name: kubectl-app
+            image: "{{ $top.Values.scheduledScaling.image.repository }}:{{ $top.Values.scheduledScaling.image.tag }}"
+            args:
+            - patch
+            - deployment
+            - catalyst-worker
+            - --patch
+            - '{"spec":{"replicas":{{ $cronjob.replicas }}}}'
+---
+{{- end }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: worker-scaler
+  labels:
+    app: catalyst-app
+rules:
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - update
+      - patch
+      - watch
+      - list
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: worker-scaler
+  labels:
+    app: catalyst-app
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: worker-scaler
+subjects:
+  - kind: ServiceAccount
+    name: worker-scaler
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: worker-scaler
+  labels:
+    app: catalyst-app
+  # namespace: {{ .Release.Namespace }}
+{{- end }}

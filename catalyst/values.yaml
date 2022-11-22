@@ -1,0 +1,14 @@
+scheduledScaling:
+  # requires autoscaler to be enabled
+  # all times are UTC
+  enabled: false
+  image:
+    repository: bitnami/kubectl
+    tag: 1.22
+  cronjobs: []
+    # - name: scale-up
+    #   schedule: "0 11 * * 1-5"
+    #   replicas: 2
+    # - name: scale-down
+    #   schedule: "0 23 * * 1-5"
+    #   replicas: 1
