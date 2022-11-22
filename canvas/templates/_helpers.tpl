@@ -51,12 +51,23 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Create the name of the Canvas service account to use
 */}}
 {{- define "canvas.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
 {{- default (include "canvas.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the name of the s3mail service account to use
+*/}}
+{{- define "s3mail.serviceAccountName" -}}
+{{- if .Values.s3mail.serviceAccount.create }}
+{{- default (include "canvas.fullname" .) .Values.s3mail.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.s3mail.serviceAccount.name }}
 {{- end }}
 {{- end }}

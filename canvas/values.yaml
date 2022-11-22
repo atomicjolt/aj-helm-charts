@@ -18,13 +18,13 @@ fullnameOverride: "canvas"
 configSecret: "canvas-secrets"
 externalSecret:
   enabled: false
-  spec: 
+  spec:
     backendType: systemManager
     data: []
 externalSecretRedis:
   enabled: false
   name: redis
-  spec: 
+  spec:
     backendType: systemManager
     data: []
 
@@ -190,7 +190,7 @@ canvas-rce-api:
 
   externalSecret:
     enabled: false
-    spec: 
+    spec:
       backendType: systemManager
       data: []
 
@@ -232,3 +232,32 @@ redis:
       enabled: false
   metrics:
     enabled: true
+
+s3mail:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: amazon/aws-cli
+    tag: "2.8.0"
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: "ses-s3mail"
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: "s3mail"
+  terminationGracePeriodSeconds: 30
+  # Default AWS Region is us-east-1
+  awsRegion: "us-east-1"
+  sesBucket: ""
+  lifecycle: {}
+  resources: {}
+    # requests:
+    #   cpu: 100m
+    #   memory: 1Gi
