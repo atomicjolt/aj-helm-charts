@@ -207,6 +207,7 @@ redis:
 
   commonConfiguration: |-
     maxmemory 50mb
+    maxmemory-policy allkeys-lru
     save ""
 
   auth:
