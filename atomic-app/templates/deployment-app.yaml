@@ -62,7 +62,7 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /readiness
+              path: {{ .Values.readinessProbePath }}
               port: 3000
               scheme: HTTP
             failureThreshold: 1
