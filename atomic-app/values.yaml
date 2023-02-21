@@ -19,6 +19,7 @@ app:
   pumaThreads: 5:5
   pumaWorkers: 2
   extraArgs: []
+  readinessProbePath: "/readiness"
   terminationGracePeriodSeconds: 75
 
   podDisruptionBudget:
