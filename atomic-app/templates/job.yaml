@@ -34,7 +34,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["sh", "-c", "bundle exec rake db:migrate && bundle exec rake db:seed"]
+          command: ["sh", "-c", "bundle exec rails db:migrate && bundle exec rails db:seed"]
           volumeMounts:
             - name: secrets
               mountPath: /app/config/k8s
