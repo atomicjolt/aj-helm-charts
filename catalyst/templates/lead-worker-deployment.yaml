@@ -34,6 +34,12 @@ spec:
             mountPath: /etc/catalyst
         resources:
 {{ .Values.leadWorkerResources | toYaml | indent 10 }}
+{{ if .Values.leadWorkerAffinity }}
+        {{- with .Values.leadWorkerAffinity }}
+        affinity:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+{{ end }}
       initContainers:
       - name: check-migrations
         image: {{ .Values.image }}
