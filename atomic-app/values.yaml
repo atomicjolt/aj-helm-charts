@@ -43,6 +43,24 @@ app:
     maxReplicas: 10
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
+    scaleUp:
+      endabled: false
+      stabilizationWindowSeconds: 0
+      policies:
+        percentValue: 100
+        percentPeriodSeconds: 15
+        podsValue: 4
+        podsPeriodSeconds: 15
+      selectPolicy: Max
+    scaleDown:
+      enabled: false
+      stabilizationWindowSeconds: 300
+      policies:
+        percentValue: 10
+        percentPeriodSeconds: 60
+        podsValue: 1
+        podsPeriodSeconds: 60
+      selectPolicy: Min
 
 
 worker:
@@ -72,6 +90,24 @@ worker:
     maxReplicas: 10
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
+    scaleUp:
+      enabled: false
+      stabilizationWindowSeconds: 0
+      policies:
+        percentValue: 100
+        percentPeriodSeconds: 15
+        podsValue: 4
+        podsPeriodSeconds: 15
+      selectPolicy: Max
+    scaleDown:
+      enabled: false
+      stabilizationWindowSeconds: 300
+      policies:
+        percentValue: 10
+        percentPeriodSeconds: 60
+        podsValue: 1
+        podsPeriodSeconds: 60
+      selectPolicy: Min
 
 serviceAccount:
   # Specifies whether a service account should be created

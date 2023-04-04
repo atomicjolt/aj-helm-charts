@@ -1,5 +1,6 @@
+# https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 {{- if .Values.worker.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "app.fullname" . }}-worker
@@ -19,12 +20,41 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.worker.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.worker.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
     {{- if .Values.worker.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.worker.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.worker.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+  behavior:
+    {{- if .Values.app.autoscaling.scaleUp.enabled }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.worker.autoscaling.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: Percent
+        value: {{ .Values.worker.autoscaling.scaleUp.policies.percentValue }}
+        periodSeconds: {{ .Values.worker.autoscaling.scaleUp.policies.percentPeriodSeconds }}
+      - type: Pods
+        value: {{ .Values.worker.autoscaling.scaleUp.policies.podsValue }}
+        periodSeconds: {{ .Values.worker.autoscaling.scaleUp.policies.podsPeriodSeconds }}
+      selectPolicy: {{ .Values.worker.autoscaling.scaleUp.selectPolicy }}
+    {{- end }}
+    {{- if .Values.app.autoscaling.scaleDown.enabled }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.worker.autoscaling.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: Percent
+        value: {{ .Values.worker.autoscaling.scaleDown.policies.percentValue }}
+        periodSeconds: {{ .Values.worker.autoscaling.scaleDown.policies.percentPeriodSeconds }}
+      - type: Pods
+        value: {{ .Values.worker.autoscaling.scaleDown.policies.podsValue }}
+        periodSeconds: {{ .Values.worker.autoscaling.scaleDown.policies.podsPeriodSeconds }}
+      selectPolicy: {{ .Values.worker.autoscaling.scaleDown.selectPolicy }}
     {{- end }}
 {{- end }}
