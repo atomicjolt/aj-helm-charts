@@ -13,7 +13,7 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: catalyst
-            image: {{ .Value.image }}
+            image: {{ .Values.image }}
             command: ["/bin/bash"]
             args:
             - "-c"
