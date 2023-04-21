@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "error-summary"
+  labels:
+    app: catalyst-app
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: catalyst
+            image: {{ .Value.image }}
+            command: ["/bin/bash"]
+            args:
+            - "-c"
+            # Sleep to give the app time to start completely
+            - '/opt/catalyst/bin/catalyst start && sleep 5 && /opt/catalyst/bin/catalyst rpc "Stats.DailyErrorStats.send_daily_summary()"'
+            env:
+            - name: REPLACE_OS_VARS
+              value: "true"
+            - name: ERLANG_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            volumeMounts:
+              - name: config-volume
+                mountPath: /etc/catalyst
+          volumes:
+            - name: config-volume
+              projected:
+                sources:
+                - secret:
+                    name: catalyst-config
+                - configMap:
+                    name: catalyst-app-config
