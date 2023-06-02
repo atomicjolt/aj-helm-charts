@@ -2,12 +2,13 @@
 
 ## Charts
 
-| Chart          | Description   |
-| -------------- | ------------- |
-| atomic-app     | Ruby on Rails app |
-| canvas         | Canvas LMS deployment |
-| canvas-rce-api | Canvas RCE API |
-| catalyst       | Elixir web server and worker |
+| Chart               | Description   |
+| ------------------- | ------------- |
+| atomic-app          | Ruby on Rails app |
+| canvas              | Canvas LMS deployment |
+| canvas-rce-api      | Canvas RCE API |
+| catalyst            | Elixir web server and worker |
+| aa-datatable-engine | Node app used by AA |
 
 The desired container image and other options must be specified in a values files.
 

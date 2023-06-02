@@ -1,0 +1,28 @@
+{{- if and ( .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" ) .Values.networkPolicy.enabled -}}
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aa-datatable-engine.name" . }}
+spec:
+  selector: app.kubernetes.io/name == '{{ include "aa-datatable-engine.name" . }}'
+  {{- if gt (len .Values.networkPolicy.ingressRules) 0 }}
+  ingress:
+    {{- range .Values.networkPolicy.ingressRules }}
+    - {{ toYaml . | nindent 6}}
+    {{- end }}
+  {{- end }}
+  egress:
+    - action: Allow
+      destination:
+        services:
+          name: kube-dns
+          namespace: kube-system
+    - action: Allow
+      destination:
+        services:
+          name: {{ include "aa-datatable-engine.fullname" . }}-redis-master
+          namespace: {{ .Release.Namespace }}
+    {{- range .Values.networkPolicy.egressRules }}
+    - {{ toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}
