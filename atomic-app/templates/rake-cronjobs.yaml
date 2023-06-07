@@ -1,0 +1,39 @@
+{{- if .Values.rakeCronjobs.enabled -}}
+{{- $top := . -}}
+{{- range $cronjob := .Values.rakeCronjobs.jobs -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "app.fullname" $top }}-{{ $cronjob.name }}
+  labels:
+    {{- include "app.labels" $top | nindent 4 }}
+  namespace: {{ $top.Release.Namespace }}
+spec:
+  schedule: "{{ $cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: rake
+            image: "{{ $top.Values.image.repository }}:{{ $top.Values.image.tag }}"
+            command: ["/bin/bash"]
+            args:
+            - "-c"
+            - "{{ $cronjob.task }}"
+            volumeMounts:
+              - name: secrets
+                mountPath: /app/config/k8s
+              - name: credentials
+                mountPath: /app/config/credentials
+          volumes:
+            - name: secrets
+              secret:
+                secretName: {{ $top.Values.configSecret }}
+            - name: credentials
+              secret:
+                secretName: {{ $top.Values.credentialsSecret }}
+---
+{{- end }}
+{{- end }}
