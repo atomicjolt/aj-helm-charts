@@ -1,6 +1,6 @@
-{{- if .Values.rakeCronjobs.enabled -}}
+{{- if .Values.cronjobs.enabled -}}
 {{- $top := . -}}
-{{- range $cronjob := .Values.rakeCronjobs.jobs -}}
+{{- range $cronjob := .Values.cronjobs.jobs -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -14,19 +14,33 @@ spec:
     spec:
       template:
         spec:
+          serviceAccountName: {{ include "app.serviceAccountName" $top }}
           restartPolicy: OnFailure
+          securityContext:
+            {{- toYaml $top.Values.podSecurityContext | nindent 12 }}
+          {{- with $top.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           containers:
           - name: rake
             image: "{{ $top.Values.image.repository }}:{{ $top.Values.image.tag }}"
+            imagePullPolicy: {{ $top.Values.image.pullPolicy }}
             command: ["/bin/bash"]
             args:
             - "-c"
             - "{{ $cronjob.task }}"
+            resources:
+              {{- toYaml $top.Values.cronjobs.resources | nindent 14 }}
             volumeMounts:
               - name: secrets
                 mountPath: /app/config/k8s
               - name: credentials
                 mountPath: /app/config/credentials
+              {{- if $top.Values.persistence.enabled }}
+              - name: shared
+                mountPath: /shared
+              {{- end }}
           volumes:
             - name: secrets
               secret:
@@ -34,6 +48,11 @@ spec:
             - name: credentials
               secret:
                 secretName: {{ $top.Values.credentialsSecret }}
+            {{- if $top.Values.persistence.enabled }}
+            - name: shared
+              persistentVolumeClaim:
+                claimName: {{ template "app.fullname" $top }}
+            {{- end }}
 ---
 {{- end }}
 {{- end }}

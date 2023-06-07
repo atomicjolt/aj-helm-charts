@@ -262,8 +262,9 @@ redis:
     serviceMonitor:
       enabled: true
 
-rakeCronjobs:
+cronjobs:
   enabled: false
+  resources: {}
   # example job
   # jobs:
   #   - name: cache-unique-users
