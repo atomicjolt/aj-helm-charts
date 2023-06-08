@@ -261,3 +261,12 @@ redis:
     enabled: true
     serviceMonitor:
       enabled: true
+
+cronjobs:
+  enabled: false
+  resources: {}
+  # example job
+  # jobs:
+  #   - name: cache-unique-users
+  #     schedule: "45 23 * * *"
+  #     task: "rake sync:unique_users"
