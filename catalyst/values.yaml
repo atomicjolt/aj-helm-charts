@@ -11,3 +11,32 @@ scheduledScaling:
     # - name: scale-down
     #   schedule: "0 23 * * 1-5"
     #   replicas: 1
+
+redis:
+  enabled: false
+  architecture: standalone
+  commonConfiguration: |-
+    maxmemory 50mb
+    save ""
+  auth:
+    sentinel: false
+    existingSecret: redis
+    existingSecretPasswordKey: redis-password
+    usePasswordFiles: true
+  master:
+    persistence:
+      enabled: false
+    resources:
+      requests:
+        memory: 100Mi
+      limits:
+        memory: 200Mi
+  replica:
+    replicaCount: 0
+    disableCommands:
+    persistence:
+      enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
