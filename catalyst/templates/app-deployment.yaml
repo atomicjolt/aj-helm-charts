@@ -59,6 +59,10 @@ spec:
           - name: config-volume
             mountPath: /etc/catalyst
       terminationGracePeriodSeconds: 60
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "2"
       volumes:
         - name: config-volume
           projected:
