@@ -9,3 +9,4 @@ data:
     run_slow_jobs = false
     run_regular_jobs = true
     connect_cluster = true
+    index_queue_run_worker = true
