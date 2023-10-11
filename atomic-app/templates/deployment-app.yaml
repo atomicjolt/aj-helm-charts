@@ -71,6 +71,9 @@ spec:
             {{- toYaml .Values.app.lifecycle | nindent 12 }}
           resources:
             {{- toYaml .Values.app.resources | nindent 12 }}
+          env:
+            - name: PROMETHEUS_EXPORTER_PORT
+              value: "9394"
       initContainers:
         - name: check-migrations
           securityContext:
