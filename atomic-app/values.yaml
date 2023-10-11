@@ -19,7 +19,6 @@ app:
   pumaThreads: 5:5
   pumaWorkers: 2
   extraArgs: []
-  readinessProbePath: "/readiness"
   terminationGracePeriodSeconds: 75
 
   podDisruptionBudget:
@@ -138,6 +137,8 @@ worker:
       #     value: 1
       #     periodSeconds: 60
       #   selectPolicy: Min
+
+readinessProbePath: "/readiness"
 
 serviceAccount:
   # Specifies whether a service account should be created
