@@ -223,7 +223,7 @@ scheduledScaling:
   enabled: false
   image:
     repository: bitnami/kubectl
-    tag: 1.22
+    tag: 1.28
   cronjobs: []
     # - name: scale-up
     #   schedule: "0 11 * * 1-5"
