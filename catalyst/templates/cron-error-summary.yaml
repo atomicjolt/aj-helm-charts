@@ -18,7 +18,7 @@ spec:
             args:
             - "-c"
             # Sleep to give the app time to start completely
-            - '/opt/catalyst/bin/catalyst start && sleep 5 && /opt/catalyst/bin/catalyst rpc "Stats.DailyErrorStats.send_daily_summary()"'
+            - '/opt/catalyst/bin/catalyst start && sleep 30 && /opt/catalyst/bin/catalyst rpc "Stats.DailyErrorStats.send_daily_summary()"'
             env:
             - name: REPLACE_OS_VARS
               value: "true"
