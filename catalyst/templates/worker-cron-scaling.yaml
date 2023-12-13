@@ -18,6 +18,7 @@ spec:
           containers:
           - name: kubectl-app
             image: "{{ $top.Values.scheduledScaling.image.repository }}:{{ $top.Values.scheduledScaling.image.tag }}"
+            imagePullPolicy: IfNotPresent
             args:
             - patch
             - deployment

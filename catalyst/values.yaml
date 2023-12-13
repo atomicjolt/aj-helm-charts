@@ -12,6 +12,9 @@ scheduledScaling:
     #   schedule: "0 23 * * 1-5"
     #   replicas: 1
 
+service_monitor:
+  enabled: true
+
 redis:
   enabled: false
   architecture: standalone
