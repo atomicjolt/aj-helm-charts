@@ -13,7 +13,8 @@ spec:
       containers:
       - name: migrations
         image: {{ .Values.image }}
-        command: ["/opt/catalyst/bin/catalyst", "migrate"]
+        imagePullPolicy: IfNotPresent
+        command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.migrate(nil)"]
         volumeMounts:
           - name: config-volume
             mountPath: /etc/catalyst

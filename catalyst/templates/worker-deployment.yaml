@@ -21,6 +21,7 @@ spec:
       containers:
       - name: catalyst
         image: {{ .Values.image }}
+        imagePullPolicy: IfNotPresent
         env:
           - name: REPLACE_OS_VARS
             value: "true"
@@ -51,7 +52,8 @@ spec:
       initContainers:
       - name: check-migrations
         image: {{ .Values.image }}
-        command: ["/opt/catalyst/bin/catalyst", "check_migrations"]
+        imagePullPolicy: IfNotPresent
+        command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.check_migrations(nil)"]
         env:
         - name: REPLACE_OS_VARS
           value: "true"
