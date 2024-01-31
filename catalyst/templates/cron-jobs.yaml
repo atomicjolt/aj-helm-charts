@@ -1,11 +1,14 @@
+{{- if .Values.cronjobs.enabled -}}
+{{- $top := . -}}
+{{- range $cronjob := .Values.cronjobs.jobs -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "error-summary"
+  name: "{{ $cronjob.name }}"
   labels:
     app: catalyst-app
 spec:
-  schedule: "0 0 * * *"
+  schedule: "{{ $cronjob.schedule }}"
   jobTemplate:
     spec:
       template:
@@ -13,9 +16,9 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: catalyst
-            image: {{ .Values.image }}
+            image: {{ $top.Values.image }}
             imagePullPolicy: IfNotPresent
-            command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.send_daily_summary()"]
+            command: ["/opt/catalyst/bin/catalyst", "eval", "{{ $cronjob.command }}"]
             env:
             - name: REPLACE_OS_VARS
               value: "true"
@@ -34,3 +37,6 @@ spec:
                     name: catalyst-config
                 - configMap:
                     name: catalyst-app-config
+---
+{{- end }}
+{{- end }}

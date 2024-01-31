@@ -15,6 +15,14 @@ scheduledScaling:
 service_monitor:
   enabled: true
 
+cronjobs:
+  enabled: false
+  jobs:
+  - name: error-summary
+    schedule: "0 0 * * *"
+    command: "Catalyst.ReleaseTasks.send_daily_summary()"
+
+
 redis:
   enabled: false
   architecture: standalone
