@@ -8,5 +8,6 @@ data:
     run_scheduler = true
     run_slow_jobs = true
     run_regular_jobs = false
+    run_substitution_processor = true
     connect_cluster = true
     collect_db_metrics = true
