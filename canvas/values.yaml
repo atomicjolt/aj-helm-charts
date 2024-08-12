@@ -31,7 +31,21 @@ externalSecretRedis:
 app:
   replicaCount: 1
   terminationGracePeriodSeconds: 75
-  env: {}
+  env:
+    -name: PASSENGER_MAX_POOL_SIZE
+     value: "12"
+    -name: PASSENGER_MAX_REQUEST_QUEUE_SIZE
+     value: "200"
+    -name: PASSENGER_MIN_INSTANCES
+     value: "6"
+    -name: PASSENGER_MAX_REQUESTS
+     value: "2000"
+    -name: PASSENGER_STARTUP_TIMEOUT
+     value: "180"
+    -name: NGINX_MAX_UPLOAD_SIZE
+     value: "10g"
+    -name: APP_DOMAIN
+     value: "canvas"
   lifecycle: {}
   resources: {}
     # limits:
