@@ -53,7 +53,10 @@ spec:
             - name: STATSD_ENABLE
               value: "1"
             {{- end }}
-            {{- toYaml .Values.app.env | nindent 12 }}
+            {{- range .Values.worker.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
           lifecycle:
             {{- toYaml .Values.worker.lifecycle | nindent 12 }}
           resources:
