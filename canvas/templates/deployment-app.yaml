@@ -58,7 +58,7 @@ spec:
             {{- end }}
             {{- range $key, $value := $.Values.app.env  }}
             - name: {{ $key }}
-              value: {{ $value }}
+              value: "{{ $value }}"
             {{- end }}
           lifecycle:
             {{- toYaml .Values.app.lifecycle | nindent 12 }}
