@@ -15,6 +15,7 @@ spec:
         app: catalyst-app
 {{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
     spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
       - name: catalyst
         image: {{ .Values.image }}

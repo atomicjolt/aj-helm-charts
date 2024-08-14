@@ -18,6 +18,7 @@ spec:
         cluster: catalyst-workers
 {{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
     spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
       - name: catalyst
         image: {{ .Values.image }}

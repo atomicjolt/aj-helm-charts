@@ -22,6 +22,10 @@ cronjobs:
     schedule: "0 0 * * *"
     command: "Catalyst.ReleaseTasks.send_daily_summary()"
 
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
 
 redis:
   enabled: false
