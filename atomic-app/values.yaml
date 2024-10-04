@@ -78,6 +78,7 @@ app:
 
 
 worker:
+  enabled: true
   replicaCount: 1
   queWorkers: 2
   extraArgs: []
