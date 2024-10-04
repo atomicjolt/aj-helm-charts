@@ -74,6 +74,8 @@ spec:
           volumeMounts:
             - name: secrets
               mountPath: /app/config/k8s
+            - name: credentials
+              mountPath: /app/config/credentials
       volumes:
         - name: secrets
           secret:
@@ -98,7 +100,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      
+
       {{- if .Values.topologySpreadConstraint.enabled }}
       topologySpreadConstraints:
         - maxSkew: {{ .Values.topologySpreadConstraint.maxSkew }}
