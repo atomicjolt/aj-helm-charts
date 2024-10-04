@@ -271,3 +271,50 @@ cronjobs:
   #   - name: cache-unique-users
   #     schedule: "45 23 * * *"
   #     task: "rake sync:unique_users"
+
+externalSecrets:
+  config:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: database.yml
+    #   remoteRef:
+    #     key: /path/database.yml
+    # - secretKey: secrets.yml
+    #   remoteRef:
+    #     key: /path/secrets.yml
+    # - secretKey: itembanks.yml
+    #   remoteRef:
+    #     key: /path/itembanks.yml
+    # - secretKey: storage.yml
+    #   remoteRef:
+    #     key: /path/storage.yml
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
+
+  credentials:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: production.key
+    #   remoteRef:
+    #     key: /path/production.key
+    # - secretKey: production.yml.enc
+    #   remoteRef:
+    #     key: /path/secrets.yml.enc
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
