@@ -283,12 +283,6 @@ externalSecrets:
     # - secretKey: secrets.yml
     #   remoteRef:
     #     key: /path/secrets.yml
-    # - secretKey: itembanks.yml
-    #   remoteRef:
-    #     key: /path/itembanks.yml
-    # - secretKey: storage.yml
-    #   remoteRef:
-    #     key: /path/storage.yml
     secretStoreRef: {}
     # secretStoreRef:
     #   name: aws-ssm
