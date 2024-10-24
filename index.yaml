@@ -1,0 +1,82 @@
+apiVersion: v1
+entries:
+  aa-datatable-engine:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2024-10-24T20:43:13.250612229Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.1.0
+    description: A Helm chart for the datatable engine
+    digest: f7ec300c5a65cb612fba0915c3efe71102e1763e9f64637af9cabda0c02d54a8
+    name: aa-datatable-engine
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/aa-datatable-engine-0.2.0/aa-datatable-engine-0.2.0.tgz
+    version: 0.2.0
+  atomic-app:
+  - apiVersion: v2
+    appVersion: prod
+    created: "2024-10-24T20:43:13.482048791Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.1.0
+    description: A Helm chart for Atomic Rails Apps
+    digest: 9d19152b33d7acc41a782d02afa9775657b2589d0ce4fdf743ae3a24eade362e
+    name: atomic-app
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-app-2.5.1/atomic-app-2.5.1.tgz
+    version: 2.5.1
+  canvas:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2024-10-24T20:43:13.633888694Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.13.2
+    - condition: canvas-rce-api.enabled
+      name: canvas-rce-api
+      repository: file://../canvas-rce-api
+      version: 3.0.0
+    description: A Helm chart for Kubernetes
+    digest: 89f17bcd1260b0d36ad7a1a43199e30d215f38acc931665fe84751c1945073b5
+    name: canvas
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/canvas-3.1.0/canvas-3.1.0.tgz
+    version: 3.1.0
+  canvas-rce-api:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2024-10-24T20:43:13.846865573Z"
+    description: A Helm chart for Kubernetes for Canvas RCE API
+    digest: a561bb8f2c803e93028ae26fb49ae3fccebf0988f0dd45c897c795bd1c44b5bc
+    name: canvas-rce-api
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/canvas-rce-api-3.0.0/canvas-rce-api-3.0.0.tgz
+    version: 3.0.0
+  catalyst-chart:
+  - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2024-10-24T20:43:14.01735785Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.8.0
+    description: Run catalyst web and worker instances
+    digest: 54eb60b803043fbea6efb7a53d83966d37df461f10524b1e42aa730379055197
+    name: catalyst-chart
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/catalyst-chart-1.8.0/catalyst-chart-1.8.0.tgz
+    version: 1.8.0
+generated: "2024-10-24T20:43:14.0173688Z"
