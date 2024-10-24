@@ -26,7 +26,11 @@ Install an example
 helm install app atomicjolt/atomic-app -f values.yaml
 ```
 
-## To build a chart
+## Chart builds
+
+Chart builds are automated by GitHub Actions and are triggered by a merge to main, using the project here: https://atomicjolt.github.io/aj-helm-charts/
+
+### To build a chart manually
 
 Move to the chart directory and update the dependencies:
 ```
