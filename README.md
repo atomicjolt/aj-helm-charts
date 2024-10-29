@@ -17,7 +17,7 @@ The desired container image and other options must be specified in a values file
 Add this repository to helm
 
 ```
-helm repo add atomicjolt https://atomicjolt-helm-charts.s3.amazonaws.com
+helm repo add atomicjolt https://atomicjolt.github.io/aj-helm-charts/
 ```
 
 Install an example
@@ -26,7 +26,11 @@ Install an example
 helm install app atomicjolt/atomic-app -f values.yaml
 ```
 
-## To build a chart
+## Chart builds
+
+Chart builds are automated by GitHub Actions and are triggered by a merge to main, using the project here: https://atomicjolt.github.io/aj-helm-charts/
+
+### To build a chart manually
 
 Move to the chart directory and update the dependencies:
 ```
@@ -34,12 +38,13 @@ cd chart_name
 helm dependencies build .
 ```
 
-Then build the chart file
+To build the chart file locally
 ```
 cd ../repo
 helm package ../chart_name
-curl -O https://atomicjolt-helm-charts.s3.amazonaws.com/index.yaml
-helm repo index --merge index.yaml .
-aws s3 cp index.yaml s3://atomicjolt-helm-charts/
-aws s3 cp chart_name-1.0.0.tgz s3://atomicjolt-helm-charts/
+```
+
+Results in a tar file with the following template `<chart_name>-<chart_version>.tgz`
+```
+chart_name-1.0.0.tgz
 ```
