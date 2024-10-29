@@ -36,7 +36,7 @@ spec:
           command:
             - pm2-runtime
             - start
-            - index.js
+            - "src/index.js"
             {{- range .Values.extraArgs }}
             - "{{ . }}"
             {{- end }}
