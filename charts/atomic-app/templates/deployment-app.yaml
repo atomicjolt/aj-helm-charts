@@ -6,10 +6,17 @@ metadata:
     type: app-server
     {{- include "app.labels" . | nindent 4 }}
     {{- if .Values.app.ajAppMonitoring.enabled }}
+    atomicjolt.com/release-notifier: enabled
+    {{- end }}
+  annotations:
+    {{- if .Values.app.ajAppMonitoring.enabled }}
     {{- range $key, $value := .Values.app.ajAppMonitoring }}
-    aj-app-monitoring/{{- $key }}: {{ $value }}
+    {{- if ne $key "enabled"}}
+    atomicjolt.com/release-notifier-{{ $key }}: {{ $value }}
     {{- end }}
     {{- end }}
+    {{- end }}
+
 spec:
   {{- if not .Values.app.autoscaling.enabled }}
   replicas: {{ .Values.app.replicaCount }}

@@ -22,8 +22,9 @@ app:
   terminationGracePeriodSeconds: 75
   ajAppMonitoring:
     enabled: false
-    # environment: "dev"
-    #name: "atomic-app"
+    # environment: dev
+    # name: atomic-app
+    # slackmoji: rocket
 
   podDisruptionBudget:
     enabled: false
