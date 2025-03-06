@@ -20,6 +20,10 @@ app:
   pumaWorkers: 2
   extraArgs: []
   terminationGracePeriodSeconds: 75
+  ajAppMonitoring:
+    enabled: false
+    # environment: "dev"
+    #name: "atomic-app"
 
   podDisruptionBudget:
     enabled: false
