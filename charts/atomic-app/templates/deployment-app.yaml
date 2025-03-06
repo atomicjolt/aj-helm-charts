@@ -5,6 +5,11 @@ metadata:
   labels:
     type: app-server
     {{- include "app.labels" . | nindent 4 }}
+    {{- if .Values.app.ajAppMonitoring.enabled }}
+    {{- range $key, $value := .Values.app.ajAppMonitoring }}
+    aj-app-monitoring/{{- $key }}: {{ $value }}
+    {{- end }}
+    {{- end }}
 spec:
   {{- if not .Values.app.autoscaling.enabled }}
   replicas: {{ .Values.app.replicaCount }}
