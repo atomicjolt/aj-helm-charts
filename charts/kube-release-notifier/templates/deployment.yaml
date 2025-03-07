@@ -50,6 +50,16 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secretName }}
                   key: SLACK_CHANNEL
+            - name: GOOGLE_SHEETS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: GOOGLE_SHEETS_TOKEN
+            - name: SPREADSHEET_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: SPREADSHEET_ID
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -35,6 +35,12 @@ externalSecrets:
   # - secretKey: SLACK_CHANNEL
   #   remoteRef:
   #     key: /path/SLACK_CHANNEL
+  # - secretKey: GOOGLE_SHEETS_TOKEN
+  #   remoteRef:
+  #     key: /path/GOOGLE_SHEETS_TOKEN
+  # - secretKey: SPREADSHEET_ID
+  #   remoteRef:
+  #     key: /path/SPREADSHEET_ID
   secretStoreRef: {}
     # name: aws-ssm
     # kind: ClusterSecretStore
