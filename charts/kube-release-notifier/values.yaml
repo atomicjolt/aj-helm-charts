@@ -26,6 +26,24 @@ serviceAccount:
 clusterRole:
   name: kube-release-notifier
 
+externalSecrets:
+  enabled: false
+  data: []
+  # - secretKey: SLACK_URL
+  #   remoteRef:
+  #     key: /path/SLACK_URL
+  # - secretKey: SLACK_CHANNEL
+  #   remoteRef:
+  #     key: /path/SLACK_CHANNEL
+  secretStoreRef: {}
+    # name: aws-ssm
+    # kind: ClusterSecretStore
+  refreshInterval: 2m
+  dataFrom: []
+  target: 
+    creationPolicy: Orphan
+    deletionPolicy: Retain
+
 podAnnotations: {}
 
 podSecurityContext: {}
