@@ -13,6 +13,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 configSecret: ""
+migrationConfigSecret: null
 credentialsSecret: ""
 app:
   replicaCount: 1

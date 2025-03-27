@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: secrets
           secret:
-            secretName: {{ .Values.configSecret }}
+            secretName: {{ .Values.migrationConfigSecret | default .Values.configSecret }}
         - name: credentials
           secret:
             secretName: {{ .Values.credentialsSecret }}
