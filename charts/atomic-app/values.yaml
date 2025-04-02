@@ -13,7 +13,9 @@ nameOverride: ""
 fullnameOverride: ""
 
 configSecret: ""
-migrationConfigSecret: null
+# Set this value if you want to use a different set of secrets for the migration job.
+# This is useful with the RLS multi-tenancy setup, where migrations run as a different user.
+# migrationConfigSecret: ""
 credentialsSecret: ""
 app:
   replicaCount: 1
