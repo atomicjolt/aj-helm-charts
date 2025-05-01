@@ -2,8 +2,9 @@
 apiVersion: projectcalico.org/v3
 kind: NetworkPolicy
 metadata:
-  name: {{ include "aa-datatable-engine.name" . }}
+  name: default.{{ include "aa-datatable-engine.name" . }}
 spec:
+  tier: default
   selector: app.kubernetes.io/name == '{{ include "aa-datatable-engine.name" . }}'
   {{- if gt (len .Values.networkPolicy.ingressRules) 0 }}
   ingress:
