@@ -16,6 +16,12 @@ fullnameOverride: ""
 
 secretName: "aa-datatable-engine"
 
+ajAppMonitoring:
+  enabled: false
+  # environment: dev
+  # name: atomic-app
+  # slackmoji: rocket
+
 extraArgs:
   - -i
   - 4
