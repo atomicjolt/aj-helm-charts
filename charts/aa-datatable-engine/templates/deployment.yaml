@@ -4,6 +4,18 @@ metadata:
   name: {{ include "aa-datatable-engine.fullname" . }}
   labels:
     {{- include "aa-datatable-engine.labels" . | nindent 4 }}
+  labels:
+    {{- if .Values.ajAppMonitoring.enabled }}
+    atomicjolt.com/release-notifier: enabled
+    {{- end }}
+  annotations:
+    {{- if .Values.ajAppMonitoring.enabled }}
+    {{- range $key, $value := .Values.ajAppMonitoring }}
+    {{- if ne $key "enabled"}}
+    atomicjolt.com/release-notifier-{{ $key }}: {{ $value }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
