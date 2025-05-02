@@ -3,6 +3,21 @@ entries:
   aa-datatable-engine:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-05-02T15:57:36.269191749Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.1.0
+    description: A Helm chart for the datatable engine
+    digest: bbf2dff566648324ed8185ebcf28185029250790909d6cfe974799fdb1b2d814
+    name: aa-datatable-engine
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/aa-datatable-engine-0.3.2/aa-datatable-engine-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-05-01T18:21:49.393006234Z"
     dependencies:
     - condition: redis.enabled
@@ -150,4 +165,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-01T18:21:49.393028666Z"
+generated: "2025-05-02T15:57:36.269222897Z"
