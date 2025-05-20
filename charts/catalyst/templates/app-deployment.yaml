@@ -4,6 +4,17 @@ metadata:
   name: catalyst-app-deployment
   labels:
     app: catalyst-app
+    {{- if .Values.ajAppMonitoring.enabled }}
+    atomicjolt.com/release-notifier: enabled
+    {{- end }}
+  annotations:
+    {{- if .Values.ajAppMonitoring.enabled }}
+      {{- range $key, $value := .Values.ajAppMonitoring }}
+        {{- if ne $key "enabled"}}
+    atomicjolt.com/release-notifier-{{ $key }}: {{ $value }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
 spec:
   replicas: {{ .Values.appReplicaCount }}
   selector:
