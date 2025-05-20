@@ -9,11 +9,11 @@ metadata:
     {{- end }}
   annotations:
     {{- if .Values.ajAppMonitoring.enabled }}
-    {{- range $key, $value := .Values.ajAppMonitoring }}
-    {{- if ne $key "enabled"}}
+      {{- range $key, $value := .Values.ajAppMonitoring }}
+        {{- if ne $key "enabled"}}
     atomicjolt.com/release-notifier-{{ $key }}: {{ $value }}
-    {{- end }}
-    {{- end }}
+        {{- end }}
+      {{- end }}
     {{- end }}
 spec:
   replicas: {{ .Values.appReplicaCount }}
