@@ -141,6 +141,21 @@ entries:
   catalyst-chart:
   - apiVersion: v2
     appVersion: 1.17.0
+    created: "2025-05-20T15:59:04.352514972Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.8.0
+    description: Run catalyst web and worker instances
+    digest: 12421bccd0b27cbd6c79e64cc175bd89c84e2f4104cc123e350c439c23cf0651
+    name: catalyst-chart
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/catalyst-chart-1.9.0/catalyst-chart-1.9.0.tgz
+    version: 1.9.0
+  - apiVersion: v2
+    appVersion: 1.17.0
     created: "2024-10-24T20:43:14.01735785Z"
     dependencies:
     - condition: redis.enabled
@@ -165,4 +180,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-02T15:57:36.269222897Z"
+generated: "2025-05-20T15:59:04.352541451Z"
