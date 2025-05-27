@@ -34,6 +34,8 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /etc/catalyst
+          - name: "shared-storage"
+            mountPath: /shared
         resources:
 {{ .Values.leadWorkerResources | toYaml | indent 10 }}
 {{ if .Values.leadWorkerAffinity }}
@@ -70,4 +72,6 @@ spec:
               name: catalyst-config
           - configMap:
               name: catalyst-lead-worker-config
-
+      - name: "shared-storage"
+        persistentVolumeClaim:
+          claimName: "shared-storage"

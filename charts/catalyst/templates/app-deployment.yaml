@@ -55,6 +55,8 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /etc/catalyst
+          - name: "shared-storage"
+            mountPath: /shared
         resources:
 {{ .Values.appResources | toYaml | indent 10 }}
       initContainers:
@@ -85,3 +87,6 @@ spec:
                 name: catalyst-config
             - configMap:
                 name: catalyst-app-config
+        - name: "shared-storage"
+          persistentVolumeClaim:
+            claimName: "shared-storage"

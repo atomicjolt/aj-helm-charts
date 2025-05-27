@@ -27,6 +27,12 @@ serviceAccount:
   name: ""
   annotations: {}
 
+persistence:
+  size: 10Gi
+
+ajAppMonitoring:
+  enabled: false
+
 redis:
   enabled: false
   architecture: standalone
