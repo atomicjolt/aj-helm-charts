@@ -35,6 +35,7 @@ app:
     # maxUnavailable: 1
     labels: {}
 
+  env: []
   lifecycle: {}
   resources: {}
     # limits:
@@ -98,6 +99,7 @@ worker:
     # maxUnavailable: "1"
     labels: {}
 
+  env: []
   lifecycle: {}
   resources: {}
     # limits:
