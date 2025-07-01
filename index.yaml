@@ -64,6 +64,21 @@ entries:
   atomic-app:
   - apiVersion: v2
     appVersion: prod
+    created: "2025-07-01T23:14:33.856031147Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.1.0
+    description: A Helm chart for Atomic Rails Apps
+    digest: 85bbecd09d11c4345d83a1531817c36a89ab720bb187949f6126230424a31c4a
+    name: atomic-app
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-app-2.8.0/atomic-app-2.8.0.tgz
+    version: 2.8.0
+  - apiVersion: v2
+    appVersion: prod
     created: "2025-04-02T17:05:40.700292739Z"
     dependencies:
     - condition: redis.enabled
@@ -195,4 +210,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-27T20:50:14.713072994Z"
+generated: "2025-07-01T23:14:33.856051976Z"
