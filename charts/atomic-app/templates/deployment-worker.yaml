@@ -62,6 +62,9 @@ spec:
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
           env:
+          {{- with .Values.worker.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
             - name: PROMETHEUS_EXPORTER_PORT
               value: "9394"
       initContainers:
@@ -76,6 +79,10 @@ spec:
               mountPath: /app/config/k8s
             - name: credentials
               mountPath: /app/config/credentials
+          env:
+          {{- with .Values.worker.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       volumes:
         - name: secrets
           secret:
