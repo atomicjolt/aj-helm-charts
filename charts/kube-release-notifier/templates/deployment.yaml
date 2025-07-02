@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secretName }}
                   key: SPREADSHEET_ID
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: GITHUB_TOKEN
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
