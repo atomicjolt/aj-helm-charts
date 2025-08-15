@@ -1,6 +1,6 @@
 dependencies:
 - name: redis
-  repository: https://charts.bitnami.com/bitnami
-  version: 17.8.0
-digest: sha256:518bf88f2064784f3f233d6d3da1a8f11ed34dcb2f2e451c2bf3797e89177fdd
-generated: "2023-07-13T11:20:23.469189-06:00"
+  repository: https://groundhog2k.github.io/helm-charts/
+  version: 2.1.2
+digest: sha256:8f3662562db970a1fc375e5d60c95af5593959e60353f32bcdba7aaa850d1806
+generated: "2025-08-14T22:18:04.353550784-04:00"
