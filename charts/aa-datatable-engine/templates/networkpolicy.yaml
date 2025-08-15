@@ -21,7 +21,7 @@ spec:
     - action: Allow
       destination:
         services:
-          name: {{ include "aa-datatable-engine.fullname" . }}-redis-master
+          name: {{ include "aa-datatable-engine.fullname" . }}-redis
           namespace: {{ .Release.Namespace }}
     {{- range .Values.networkPolicy.egressRules }}
     - {{ toYaml . | nindent 6 }}

@@ -129,10 +129,10 @@ externalSecrets:
     # data:
     # - secretKey: REDIS_URL
     #   remoteRef:
-    #     key: /path/redis_url
+    #     key: /path/REDIS_URL
     # - secretKey: LEARNOSITY_SECRET
     #   remoteRef:
-    #     key: /path/learnosity_secret
+    #     key: /path/LEARNOSITY_SECRET
     secretStoreRef: {}
     # secretStoreRef:
     #   name: aws-ssm
