@@ -1,4 +1,4 @@
-## Release 3.0.0 — Switch from Bitnami Redis Chart
+## Release 1.0.0 — Switch from Bitnami Redis Chart
 
 > **⚠️ Breaking Change** — This affects you if you're using Redis.
 
