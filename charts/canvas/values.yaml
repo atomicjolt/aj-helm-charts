@@ -297,6 +297,7 @@ redis:
   redisConfig: |-
     rename-command FLUSHDB ""
     rename-command FLUSHALL ""
+    maxmemory-policy allkeys-lru
     save ""
 
 s3mail:
