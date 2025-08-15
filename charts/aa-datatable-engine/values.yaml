@@ -99,6 +99,7 @@ networkPolicy:
   egressRules: []
 
 redis:
+  enabled: false
   #image.registry: public.ecr.aws/docker/library
   
   # Additional configuration (e.g. password)

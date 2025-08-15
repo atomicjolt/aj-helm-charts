@@ -34,6 +34,7 @@ ajAppMonitoring:
   enabled: false
 
 redis:
+  enabled: false
   #image.registry: public.ecr.aws/docker/library
   
   # Additional configuration (e.g. password)

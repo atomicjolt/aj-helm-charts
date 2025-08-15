@@ -275,6 +275,7 @@ canvas-rce-api:
       enabled: true
 
 redis:
+  enabled: false
   #image.registry: public.ecr.aws/docker/library
   
   # Additional configuration (e.g. password)
