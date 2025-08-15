@@ -25,8 +25,13 @@ externalSecretRedis:
   enabled: false
   name: redis
   spec:
-    backendType: systemManager
     data: []
+    secretStoreRef: {}
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
 
 app:
   replicaCount: 1
@@ -228,8 +233,8 @@ scheduledScaling:
   # all times are UTC
   enabled: false
   image:
-    repository: bitnami/kubectl
-    tag: 1.22
+    repository: rancher/kubectl
+    tag: v1.30.14
   cronjobs: []
     # - name: scale-up
     #   schedule: "0 11 * * 1-5"
@@ -285,6 +290,9 @@ redis:
 
   metrics:
     enabled: true
+    exporter:
+      extraExporterEnvSecrets:
+        - redis-exporter
 
   serviceMonitor:
     enabled: true

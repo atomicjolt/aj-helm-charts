@@ -103,12 +103,15 @@ redis:
   #image.registry: public.ecr.aws/docker/library
   
   # Additional configuration (e.g. password)
-  extraSecretRedisConfigs: redis-config
+  extraSecretRedisConfigs: aa-datatable-engine-redis-config
 
   useDeploymentWhenNonHA: true
 
   metrics:
     enabled: true
+    exporter:
+      extraExporterEnvSecrets:
+        - aa-datatable-engine-redis-exporter
 
   serviceMonitor:
     enabled: true
