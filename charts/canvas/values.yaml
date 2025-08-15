@@ -25,8 +25,13 @@ externalSecretRedis:
   enabled: false
   name: redis
   spec:
-    backendType: systemManager
     data: []
+    secretStoreRef: {}
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
 
 app:
   replicaCount: 1
@@ -285,6 +290,9 @@ redis:
 
   metrics:
     enabled: true
+    exporter:
+      extraExporterEnvSecrets:
+        - redis-exporter
 
   serviceMonitor:
     enabled: true

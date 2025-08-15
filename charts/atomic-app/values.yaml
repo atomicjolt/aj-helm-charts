@@ -256,6 +256,9 @@ redis:
 
   metrics:
     enabled: true
+    exporter:
+      extraExporterEnvSecrets:
+        - redis-exporter
 
   serviceMonitor:
     enabled: true
