@@ -275,37 +275,30 @@ canvas-rce-api:
       enabled: true
 
 redis:
-  enabled: true
-  architecture: standalone
+  #image.registry: public.ecr.aws/docker/library
+  
+  # Additional configuration (e.g. password)
+  extraSecretRedisConfigs: redis-config
 
-  commonConfiguration: |-
-    maxmemory 50mb
-    maxmemory-policy allkeys-lru
-    save ""
+  useDeploymentWhenNonHA: true
 
-  auth:
-    sentinel: false
-    existingSecret: redis
-    existingSecretPasswordKey: redis-password
-    usePasswordFiles: true
-  master:
-    resources:
-      requests:
-        memory: 100Mi
-      limits:
-        memory: 200Mi
-    disableCommands:
-      # TODO
-    persistence:
-      enabled: false
-  replica:
-    replicaCount: 0
-    disableCommands:
-      # TODO
-    persistence:
-      enabled: false
   metrics:
     enabled: true
+
+  serviceMonitor:
+    enabled: true
+
+  resources:
+    requests:
+      memory: 100Mi
+    limits:
+      memory: 200Mi
+
+  redisConfig: |-
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    maxmemory-policy allkeys-lru
+    save ""
 
 s3mail:
   enabled: false

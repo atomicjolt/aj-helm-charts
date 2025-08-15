@@ -99,32 +99,64 @@ networkPolicy:
   egressRules: []
 
 redis:
-  enabled: false
-  architecture: standalone
-  commonConfiguration: |-
-    maxmemory 50mb
-    save ""
-  auth:
-    sentinel: false
-    existingSecret: aa-datatable-engine-redis
-    existingSecretPasswordKey: redis-password
-    usePasswordFiles: true
-  master:
-    podLabels:
-      redis-type: aa-datatable-engine
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        memory: 100Mi
-      limits:
-        memory: 200Mi
-  replica:
-    replicaCount: 0
-    disableCommands:
-    persistence:
-      enabled: false
+  #image.registry: public.ecr.aws/docker/library
+  
+  # Additional configuration (e.g. password)
+  extraSecretRedisConfigs: redis-config
+
+  useDeploymentWhenNonHA: true
+
   metrics:
     enabled: true
-    serviceMonitor:
-      enabled: true
+
+  serviceMonitor:
+    enabled: true
+
+  resources:
+    requests:
+      memory: 100Mi
+    limits:
+      memory: 200Mi
+
+  redisConfig: |-
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    maxmemory-policy allkeys-lru
+    save ""
+
+externalSecrets:
+  config:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: REDIS_URL
+    #   remoteRef:
+    #     key: /path/REDIS_URL
+    # - secretKey: LEARNOSITY_SECRET
+    #   remoteRef:
+    #     key: /path/LEARNOSITY_SECRET
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
+  redis:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: redis.conf
+    #   remoteRef:
+    #     key: /path/redis.conf
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
