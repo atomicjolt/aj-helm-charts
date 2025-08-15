@@ -233,8 +233,8 @@ scheduledScaling:
   # all times are UTC
   enabled: false
   image:
-    repository: bitnami/kubectl
-    tag: 1.28
+    repository: rancher/kubectl
+    tag: v1.30.14
   cronjobs: []
     # - name: scale-up
     #   schedule: "0 11 * * 1-5"
