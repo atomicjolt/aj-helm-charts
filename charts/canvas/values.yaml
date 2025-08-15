@@ -297,6 +297,7 @@ redis:
   redisConfig: |-
     rename-command FLUSHDB ""
     rename-command FLUSHALL ""
+    save ""
 
 s3mail:
   enabled: false
