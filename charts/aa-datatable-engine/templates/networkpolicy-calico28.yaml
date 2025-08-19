@@ -1,11 +1,13 @@
 {{- if and ( .Capabilities.APIVersions.Has "projectcalico.org/v3" ) .Values.networkPolicy.enabled -}}
-{{- if .Capabilities.APIVersions.Has "projectcalico.org/v3/Tier" -}}
+{{- if not ( .Capabilities.APIVersions.Has "projectcalico.org/v3/Tier" ) -}}
+{{/*
+ NetworkPolicy for calico <= 3.28
+*/}}
 apiVersion: projectcalico.org/v3
 kind: NetworkPolicy
 metadata:
-  name: default.{{ include "aa-datatable-engine.name" . }}
+  name: {{ include "aa-datatable-engine.name" . }}
 spec:
-  tier: default
   selector: app.kubernetes.io/name == '{{ include "aa-datatable-engine.name" . }}'
   {{- if gt (len .Values.networkPolicy.ingressRules) 0 }}
   ingress:
