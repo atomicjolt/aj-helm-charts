@@ -33,6 +33,10 @@ persistence:
 ajAppMonitoring:
   enabled: false
 
+appPdb:
+  enabled: true
+  minAvailable: "0"
+
 redis:
   enabled: false
   #image.registry: public.ecr.aws/docker/library
