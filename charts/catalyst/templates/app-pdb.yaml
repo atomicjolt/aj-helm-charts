@@ -1,0 +1,16 @@
+{{- if .Values.appPdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: catalyst-app-pdb
+spec:
+{{- if .Values.appPdb.minAvailable }}
+  minAvailable: {{ .Values.appPdb.minAvailable }}
+{{- end }}
+{{- if .Values.appPdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.appPdb.maxUnavailable }}
+{{- end }}
+  selector:
+    matchLabels:
+      app: catalyst-app
+{{- end }}
