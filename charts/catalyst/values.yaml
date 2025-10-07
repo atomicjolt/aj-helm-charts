@@ -84,3 +84,19 @@ externalSecrets:
     target: 
       creationPolicy: Orphan
       deletionPolicy: Retain
+  config:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: redis.conf
+    #   remoteRef:
+    #     key: /path/redis.conf
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target: 
+      creationPolicy: Orphan
+      deletionPolicy: Retain
