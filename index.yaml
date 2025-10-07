@@ -3,6 +3,21 @@ entries:
   aa-datatable-engine:
   - apiVersion: v2
     appVersion: prod
+    created: "2025-10-07T17:06:52.537347749Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: A Helm chart for the datatable engine
+    digest: 5e85900cfe0538e1f47f4e97401fc896766f2e5d310c82705fd434b1df75d344
+    name: aa-datatable-engine
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/aa-datatable-engine-1.1.0/aa-datatable-engine-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: prod
     created: "2025-08-20T00:25:05.380305982Z"
     dependencies:
     - condition: redis.enabled
@@ -124,6 +139,21 @@ entries:
   atomic-app:
   - apiVersion: v2
     appVersion: prod
+    created: "2025-10-07T17:06:52.690731249Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: A Helm chart for Atomic Rails Apps
+    digest: 2fa165a782e985c6f56c7cbf7050a23ee46f1b3d1e3238517508b73fedadb9c7
+    name: atomic-app
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-app-3.1.0/atomic-app-3.1.0.tgz
+    version: 3.1.0
+  - apiVersion: v2
+    appVersion: prod
     created: "2025-08-15T21:33:45.101434086Z"
     dependencies:
     - condition: redis.enabled
@@ -230,6 +260,25 @@ entries:
   canvas:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-10-07T17:06:52.839361438Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    - condition: canvas-rce-api.enabled
+      name: canvas-rce-api
+      repository: file://../canvas-rce-api
+      version: 3.1.0
+    description: A Helm chart for Kubernetes
+    digest: c07af7690d15e7600b95c7caf1488f8a5520f34899719936def4d3d3e51954d8
+    name: canvas
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/canvas-4.1.0/canvas-4.1.0.tgz
+    version: 4.1.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-08-15T21:33:45.330478378Z"
     dependencies:
     - condition: redis.enabled
@@ -307,6 +356,16 @@ entries:
   canvas-rce-api:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-10-07T17:06:53.015469638Z"
+    description: A Helm chart for Kubernetes for Canvas RCE API
+    digest: 595c97dfed9f0db20a3e3fa7d27af86568f9d693aa0ae4ed1666041672cade77
+    name: canvas-rce-api
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/canvas-rce-api-3.1.0/canvas-rce-api-3.1.0.tgz
+    version: 3.1.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2024-10-24T20:43:13.846865573Z"
     description: A Helm chart for Kubernetes for Canvas RCE API
     digest: a561bb8f2c803e93028ae26fb49ae3fccebf0988f0dd45c897c795bd1c44b5bc
@@ -316,6 +375,21 @@ entries:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/canvas-rce-api-3.0.0/canvas-rce-api-3.0.0.tgz
     version: 3.0.0
   catalyst-chart:
+  - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2025-10-07T17:06:53.151383725Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: Run catalyst web and worker instances
+    digest: 547d0cdf403654ea76afca2224d96446aa8ca90f97094755fabe580a92c25d62
+    name: catalyst-chart
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/catalyst-chart-2.1.0/catalyst-chart-2.1.0.tgz
+    version: 2.1.0
   - apiVersion: v2
     appVersion: 1.17.0
     created: "2025-09-30T16:53:35.905953308Z"
@@ -424,6 +498,16 @@ entries:
   kube-release-notifier:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-10-07T17:06:53.30607032Z"
+    description: A Helm chart for Kubernetes
+    digest: da1d72d234cff58d84422074a4ef0f5900901035d0f6120f517039e7634da258
+    name: kube-release-notifier
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-1.1.0/kube-release-notifier-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-07-02T22:55:22.631724502Z"
     description: A Helm chart for Kubernetes
     digest: 61583589412b5ef21327c1bfaaf8e2a080fe09f1215832a8dcacbae3097f9851
@@ -442,4 +526,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2025-09-30T16:53:35.906036684Z"
+generated: "2025-10-07T17:06:53.306228025Z"
