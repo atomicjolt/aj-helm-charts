@@ -3,6 +3,21 @@ entries:
   aa-datatable-engine:
   - apiVersion: v2
     appVersion: prod
+    created: "2025-10-07T18:45:28.133066998Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: A Helm chart for the datatable engine
+    digest: c53ed7eb1c9efc26decb04f4bb70cc85fbd3ba2a57fd0cbbbc56b42978dfa802
+    name: aa-datatable-engine
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/aa-datatable-engine-1.1.1/aa-datatable-engine-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
+    appVersion: prod
     created: "2025-10-07T17:06:52.537347749Z"
     dependencies:
     - condition: redis.enabled
@@ -526,4 +541,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-07T17:06:53.306228025Z"
+generated: "2025-10-07T18:45:28.133172807Z"
