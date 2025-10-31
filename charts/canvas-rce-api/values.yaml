@@ -78,7 +78,7 @@ autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 10
-  metrics: {}
+  metrics: []
     # - type: Resource
     #   resource:
     #     name: cpu
