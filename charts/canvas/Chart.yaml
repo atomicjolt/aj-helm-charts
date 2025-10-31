@@ -30,6 +30,6 @@ dependencies:
     repository: https://groundhog2k.github.io/helm-charts/
     condition: redis.enabled
   - name: canvas-rce-api
-    version: 3.1.0
+    version: 3.1.1
     repository: file://../canvas-rce-api
     condition: canvas-rce-api.enabled
