@@ -13,6 +13,11 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            {{- with $top.Values.scheduledScaling.labels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         spec:
           serviceAccountName: {{ template "app.fullname" $top }}-scaler
           restartPolicy: OnFailure

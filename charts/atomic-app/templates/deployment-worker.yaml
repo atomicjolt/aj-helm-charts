@@ -23,6 +23,9 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         type: worker
+        {{- with .Values.worker.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

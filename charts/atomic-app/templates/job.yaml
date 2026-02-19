@@ -19,6 +19,9 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         type: migration
+        {{- with .Values.app.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
