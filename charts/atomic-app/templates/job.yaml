@@ -19,7 +19,7 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         type: migration
-        {{- with .Values.app.labels }}
+        {{- with .Values.migrations.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:

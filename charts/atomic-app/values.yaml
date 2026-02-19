@@ -23,6 +23,7 @@ app:
   pumaWorkers: 2
   extraArgs: []
   terminationGracePeriodSeconds: 75
+  labels: {}
   ajAppMonitoring:
     enabled: false
     # environment: dev
@@ -86,12 +87,16 @@ app:
       #   selectPolicy: Min
 
 
+migrations:
+  labels: {}
+
 worker:
   enabled: true
   replicaCount: 1
   queWorkers: 2
   extraArgs: []
   terminationGracePeriodSeconds: 30
+  labels: {}
   
   podDisruptionBudget:
     enabled: false
@@ -232,6 +237,7 @@ scheduledScaling:
   # requires autoscaler to be enabled
   # all times are UTC
   enabled: false
+  labels: {}
   image:
     repository: rancher/kubectl
     tag: v1.30.14
@@ -277,6 +283,7 @@ redis:
 
 cronjobs:
   enabled: false
+  labels: {}
   resources: {}
   # example job
   # jobs:
