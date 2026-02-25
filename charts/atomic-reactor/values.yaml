@@ -112,21 +112,39 @@ tolerations: []
 affinity: {}
 
 externalSecrets:
-  enabled: false
-  data: []
-  # data:
-  # - secretKey: env
-  #   remoteRef:
-  #     key: /path/to/env
-  secretStoreRef: {}
-  # secretStoreRef:
-  #   name: aws-ssm
-  #   kind: ClusterSecretStore
-  refreshInterval: 2m
-  dataFrom: []
-  target:
-    creationPolicy: Orphan
-    deletionPolicy: Retain
+  env:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: env
+    #   remoteRef:
+    #     key: /path/to/env
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target:
+      creationPolicy: Orphan
+      deletionPolicy: Retain
+
+  redis:
+    enabled: false
+    data: []
+    # data:
+    # - secretKey: redis.conf
+    #   remoteRef:
+    #     key: /path/redis.conf
+    secretStoreRef: {}
+    # secretStoreRef:
+    #   name: aws-ssm
+    #   kind: ClusterSecretStore
+    refreshInterval: 2m
+    dataFrom: []
+    target:
+      creationPolicy: Orphan
+      deletionPolicy: Retain
 
 redis:
   enabled: false
