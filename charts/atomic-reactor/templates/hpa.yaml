@@ -1,0 +1,26 @@
+# https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+{{- if .Values.app.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "atomic-reactor.fullname" . }}
+  labels:
+    {{- include "atomic-reactor.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "atomic-reactor.fullname" . }}
+{{- if .Values.app.autoscaling.minReplicas }}
+  minReplicas: {{ .Values.app.autoscaling.minReplicas }}
+{{- end }}
+  maxReplicas: {{ .Values.app.autoscaling.maxReplicas }}
+  {{- with .Values.app.autoscaling.metrics }}
+  metrics:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.app.autoscaling.behavior }}
+  behavior:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

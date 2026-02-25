@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "atomic-reactor.fullname" . }}-migrations
+  labels:
+    type: migrations
+    {{- include "atomic-reactor.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "atomic-reactor.selectorLabels" . | nindent 8 }}
+        type: migration
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "atomic-reactor.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      restartPolicy: Never
+      containers:
+        - name: atomic-reactor
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          #command: ["sh", "-c", "set -a; . /k8s/env && deploy/migrate.sh && deploy/seed.sh"]
+          command: ["sh", "-c", "set -a; . /k8s/env && deploy/migrate.sh"]
+          volumeMounts:
+            - name: env-secret
+              mountPath: /k8s
+          env:
+            - name: {{ .Values.envFileVar }}
+              value: /k8s/env
+          {{- with .Values.app.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.app.resources | nindent 12 }}
+      volumes:
+        - name: env-secret
+          secret:
+            secretName: atomic-reactor

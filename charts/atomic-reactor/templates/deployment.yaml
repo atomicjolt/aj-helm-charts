@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "atomic-reactor.fullname" . }}
+  labels:
+    {{- include "atomic-reactor.labels" . | nindent 4 }}
+    {{- if .Values.app.ajAppMonitoring.enabled }}
+    atomicjolt.com/release-notifier: enabled
+    {{- end }}
+  annotations:
+    {{- if .Values.app.ajAppMonitoring.enabled }}
+    {{- range $key, $value := .Values.app.ajAppMonitoring }}
+    {{- if ne $key "enabled"}}
+    atomicjolt.com/release-notifier-{{ $key }}: {{ $value }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
+spec:
+  {{- if not .Values.app.autoscaling.enabled }}
+  replicas: {{ .Values.app.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "atomic-reactor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "atomic-reactor.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "atomic-reactor.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
+      containers:
+        - name: atomic-reactor
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: env-secret
+              mountPath: /k8s
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbePath }}
+              port: 8080
+              scheme: HTTP
+            failureThreshold: 1
+            timeoutSeconds: 10
+          env:
+            - name: {{ .Values.envFileVar }}
+              value: /k8s/env
+          {{- with .Values.app.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.app.resources | nindent 12 }}
+      volumes:
+        - name: env-secret
+          secret:
+            secretName: atomic-reactor
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraint.enabled }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraint.maxSkew }}
+          topologyKey: {{ .Values.topologySpreadConstraint.topologyKey }}
+          whenUnsatisfiable: {{ .Values.topologySpreadConstraint.whenUnsatisfiable }}
+          labelSelector:
+            matchLabels:
+              {{- include "atomic-reactor.selectorLabels" . | nindent 14 }}
+      {{- end }}
