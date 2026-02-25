@@ -11,5 +11,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: 9394
+      targetPort: 9394
+      protocol: TCP
+      name: metrics
   selector:
     {{- include "atomic-reactor.selectorLabels" . | nindent 4 }}

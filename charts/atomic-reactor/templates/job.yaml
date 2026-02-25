@@ -34,8 +34,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          #command: ["sh", "-c", "set -a; . /k8s/env && deploy/migrate.sh && deploy/seed.sh"]
-          command: ["sh", "-c", "set -a; . /k8s/env && deploy/migrate.sh"]
+          command: ["sh", "-c", "set -a; . /k8s/env && deploy/migrate.sh && deploy/seed.sh"]
           volumeMounts:
             - name: env-secret
               mountPath: /k8s

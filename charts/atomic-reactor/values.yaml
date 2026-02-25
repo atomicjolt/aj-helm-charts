@@ -105,6 +105,12 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+metrics:
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    scrapeInterval: 30s
+
 nodeSelector: {}
 
 tolerations: []
