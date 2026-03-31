@@ -106,7 +106,7 @@ dnsSidecar:
   enabled: false
   # Requires Kubernetes 1.29+ for native sidecar support (init container with restartPolicy: Always).
   # The sidecar starts before all init containers, providing DNS caching for every container in the pod.
-  image: klutchell/unbound:latest
+  image: ghcr.io/klutchell/unbound:latest
   resources: {}
   # ClusterIP of the kube-dns service in your cluster.
   # Retrieve with: kubectl get svc kube-dns -n kube-system -o jsonpath='{.spec.clusterIP}'
@@ -121,7 +121,7 @@ dnsSidecar:
   rrsetCacheSize: "32m"
   metrics:
     enabled: false
-    image: ghcr.io/kumina/unbound_exporter:latest
+    image: cyb3rjak3/unbound-exporter:0.5.0
     port: 9167
     controlSocket: /run/unbound/unbound.ctl
     resources: {}
