@@ -37,6 +37,22 @@ spec:
             mountPath: /shared
         resources:
 {{ .Values.workerResources | toYaml | indent 10 }}
+      {{- if and .Values.dnsSidecar.enabled .Values.dnsSidecar.metrics.enabled }}
+      - name: unbound-exporter
+        image: {{ .Values.dnsSidecar.metrics.image }}
+        args:
+        - --unbound.host=unix://{{ .Values.dnsSidecar.metrics.controlSocket }}
+        ports:
+        - name: metrics
+          containerPort: {{ .Values.dnsSidecar.metrics.port }}
+        volumeMounts:
+        - name: unbound-socket
+          mountPath: {{ .Values.dnsSidecar.metrics.controlSocket | dir }}
+        {{- if .Values.dnsSidecar.metrics.resources }}
+        resources:
+{{ .Values.dnsSidecar.metrics.resources | toYaml | indent 10 }}
+        {{- end }}
+      {{- end }}
 {{ if .Values.workerAffinity }}
       {{- with .Values.workerAffinity }}
       affinity:
@@ -53,6 +69,23 @@ spec:
         type: "{{ .Values.workerNodeSelector }}"
 {{ end }}
       initContainers:
+      {{- if .Values.dnsSidecar.enabled }}
+      - name: unbound
+        image: {{ .Values.dnsSidecar.image }}
+        restartPolicy: Always
+        volumeMounts:
+        - name: dns-config
+          mountPath: /etc/unbound/unbound.conf
+          subPath: unbound.conf
+        {{- if .Values.dnsSidecar.metrics.enabled }}
+        - name: unbound-socket
+          mountPath: {{ .Values.dnsSidecar.metrics.controlSocket | dir }}
+        {{- end }}
+        {{- if .Values.dnsSidecar.resources }}
+        resources:
+{{ .Values.dnsSidecar.resources | toYaml | indent 10 }}
+        {{- end }}
+      {{- end }}
       - name: check-migrations
         image: {{ .Values.image }}
         imagePullPolicy: IfNotPresent
@@ -70,10 +103,24 @@ spec:
       # Workers need to be given enough time to gracefully quit after finishing
       # current jobs
       terminationGracePeriodSeconds: 60
+      {{- if .Values.dnsSidecar.enabled }}
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+        - "127.0.0.1"
+        searches:
+        - {{ .Release.Namespace }}.svc.cluster.local
+        - svc.cluster.local
+        - cluster.local
+        options:
+        - name: ndots
+          value: "2"
+      {{- else }}
       dnsConfig:
         options:
         - name: ndots
           value: "2"
+      {{- end }}
       volumes:
       - name: config-volume
         projected:
@@ -85,3 +132,12 @@ spec:
       - name: "shared-storage"
         persistentVolumeClaim:
           claimName: "shared-storage"
+      {{- if .Values.dnsSidecar.enabled }}
+      - name: dns-config
+        configMap:
+          name: catalyst-worker-dns-config
+      {{- end }}
+      {{- if and .Values.dnsSidecar.enabled .Values.dnsSidecar.metrics.enabled }}
+      - name: unbound-socket
+        emptyDir: {}
+      {{- end }}
