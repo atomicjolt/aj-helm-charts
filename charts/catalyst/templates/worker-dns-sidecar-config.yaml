@@ -1,0 +1,9 @@
+{{- if .Values.dnsSidecar.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalyst-worker-dns-config
+data:
+  unbound.conf: |
+{{ tpl .Values.dnsSidecar.unboundConf . | indent 4 }}
+{{- end }}
