@@ -1,3 +1,4 @@
+elasticsearchWhitelistLabels: {}
 scheduledScaling:
   # all times are UTC
   enabled: false
@@ -100,3 +101,57 @@ externalSecrets:
     target: 
       creationPolicy: Orphan
       deletionPolicy: Retain
+
+dnsSidecar:
+  enabled: false
+  # Requires Kubernetes 1.29+ for native sidecar support (init container with restartPolicy: Always).
+  # The sidecar starts before all init containers, providing DNS caching for every container in the pod.
+  image: ghcr.io/klutchell/unbound:1.24.2
+  resources: {}
+  # ClusterIP of the kube-dns service in your cluster.
+  # Retrieve with: kubectl get svc kube-dns -n kube-system -o jsonpath='{.spec.clusterIP}'
+  clusterDnsIP: "10.96.0.10"
+  # Upstream forwarders for the catch-all zone (".").
+  forwarders:
+  - "169.254.169.253" # AWS Route53 dns
+  # RRset cache holds individual resource records; msg cache holds full responses.
+  # rrset-cache-size should generally be 2x msg-cache-size.
+  msgCacheSize: "16m"
+  rrsetCacheSize: "32m"
+  metrics:
+    enabled: false
+    # This isn't a common image, so locking to a sha256
+    # I used: podman inspect cyb3rjak3/unbound-exporter:0.5.0 --format '{{.Digest}}'
+    image: cyb3rjak3/unbound-exporter:0.5.0@sha256:e4973d36ba6485e5e9378e6d3e72677c177d69a62a11c9da549a71ff9904e09f
+    port: 9167
+    controlSocket: /run/unbound/unbound.ctl
+    resources: {}
+  # Full unbound.conf content. Supports Helm template expressions (evaluated via tpl).
+  unboundConf: |
+    server:
+      interface: 127.0.0.1
+      port: 53
+      do-daemonize: no
+      access-control: 127.0.0.1 allow
+      msg-cache-size: {{ .Values.dnsSidecar.msgCacheSize }}
+      rrset-cache-size: {{ .Values.dnsSidecar.rrsetCacheSize }}
+      # Allow resolving K8s internal names by forwarding to CoreDNS
+      local-zone: "cluster.local." transparent
+    {{- if .Values.dnsSidecar.metrics.enabled }}
+    remote-control:
+      control-enable: yes
+      control-interface: {{ .Values.dnsSidecar.metrics.controlSocket }}
+      control-use-cert: no
+    {{- end }}
+
+    # FORWARDING RULES
+    forward-zone:
+      name: "cluster.local."
+      forward-addr: {{ .Values.dnsSidecar.clusterDnsIP }}
+
+    forward-zone:
+      name: "."
+      {{- range .Values.dnsSidecar.forwarders }}
+      forward-addr: {{ . }}
+      {{- end }}
+
