@@ -113,8 +113,7 @@ dnsSidecar:
   clusterDnsIP: "10.96.0.10"
   # Upstream forwarders for the catch-all zone (".").
   forwarders:
-  - "1.1.1.2"
-  - "1.0.0.2"
+  - "169.254.169.253" # AWS Route53 dns
   # RRset cache holds individual resource records; msg cache holds full responses.
   # rrset-cache-size should generally be 2x msg-cache-size.
   msgCacheSize: "16m"
