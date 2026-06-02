@@ -114,6 +114,9 @@ dnsSidecar:
   # Upstream forwarders for the catch-all zone (".").
   forwarders:
   - "169.254.169.253" # AWS Route53 dns
+  # Enable DNS-over-TLS for the catch-all forward zone.
+  forwardTlsUpstream: false
+  forwardSslUpstream: false
   # RRset cache holds individual resource records; msg cache holds full responses.
   # rrset-cache-size should generally be 2x msg-cache-size.
   msgCacheSize: "16m"
@@ -151,6 +154,8 @@ dnsSidecar:
 
     forward-zone:
       name: "."
+      forward-tls-upstream: {{ ternary "yes" "no" .Values.dnsSidecar.forwardTlsUpstream }}
+      forward-ssl-upstream: {{ ternary "yes" "no" .Values.dnsSidecar.forwardSslUpstream }}
       {{- range .Values.dnsSidecar.forwarders }}
       forward-addr: {{ . }}
       {{- end }}
