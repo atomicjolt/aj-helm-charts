@@ -40,6 +40,9 @@ spec:
       {{- if and .Values.dnsSidecar.enabled .Values.dnsSidecar.metrics.enabled }}
       - name: unbound-exporter
         image: {{ .Values.dnsSidecar.metrics.image }}
+        securityContext:
+          runAsUser: 100
+          runAsGroup: 101
         args:
         - --unbound.host=unix://{{ .Values.dnsSidecar.metrics.controlSocket }}
         ports:
