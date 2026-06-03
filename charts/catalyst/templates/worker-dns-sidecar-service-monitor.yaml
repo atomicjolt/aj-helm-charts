@@ -1,0 +1,29 @@
+{{- if and .Values.dnsSidecar.enabled .Values.dnsSidecar.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalyst-worker-unbound
+  labels:
+    metrics: catalyst-unbound
+spec:
+  selector:
+    app: catalyst-worker
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.dnsSidecar.metrics.port }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: catalyst-unbound-monitoring
+  labels:
+    release: metrics
+spec:
+  selector:
+    matchLabels:
+      metrics: catalyst-unbound
+  endpoints:
+  - port: metrics
+    interval: 30s
+{{- end }}
