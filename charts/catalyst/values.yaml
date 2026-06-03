@@ -106,7 +106,7 @@ dnsSidecar:
   enabled: false
   # Requires Kubernetes 1.29+ for native sidecar support (init container with restartPolicy: Always).
   # The sidecar starts before all init containers, providing DNS caching for every container in the pod.
-  image: alpinelinux/unbound:latest
+  image: klutchell/unbound:v1.25.1
   resources: {}
   # ClusterIP of the kube-dns service in your cluster.
   # Retrieve with: kubectl get svc kube-dns -n kube-system -o jsonpath='{.spec.clusterIP}'

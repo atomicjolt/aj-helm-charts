@@ -41,8 +41,10 @@ spec:
       - name: unbound-exporter
         image: {{ .Values.dnsSidecar.metrics.image }}
         securityContext:
-          runAsUser: 100
-          runAsGroup: 101
+          # klutchell/unbound uses 101:102
+          # alpine/unbound uses 100:101
+          runAsUser: 101
+          runAsGroup: 102
         args:
         - --unbound.host=unix://{{ .Values.dnsSidecar.metrics.controlSocket }}
         ports:
