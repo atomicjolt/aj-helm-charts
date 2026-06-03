@@ -122,6 +122,8 @@ dnsSidecar:
   - "169.254.169.253" # AWS Route53 dns
   # Enable DNS-over-TLS for the catch-all forward zone.
   forwardTlsUpstream: false
+  # Unbound log verbosity level (0=minimal, 1=operational, 2=detailed, 3+=debug).
+  logVerbosity: 1
   # RRset cache holds individual resource records; msg cache holds full responses.
   # rrset-cache-size should generally be 2x msg-cache-size.
   msgCacheSize: "16m"
@@ -141,7 +143,7 @@ dnsSidecar:
       do-ip4: yes
       do-ip6: no
       port: 53
-      verbosity: 2
+      verbosity: {{ .Values.dnsSidecar.logVerbosity }}
       use-syslog: no
       do-daemonize: no
       access-control: 127.0.0.1/8 allow
