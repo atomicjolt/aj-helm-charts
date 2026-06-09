@@ -1,4 +1,7 @@
 elasticsearchWhitelistLabels: {}
+
+dapWorkerResources: {}
+dapWorkerAffinity: {}
 scheduledScaling:
   # all times are UTC
   enabled: false
