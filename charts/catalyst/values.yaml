@@ -1,5 +1,6 @@
 elasticsearchWhitelistLabels: {}
 
+dapWorkerReplicaCount: 1
 dapWorkerResources: {}
 dapWorkerAffinity: {}
 scheduledScaling:

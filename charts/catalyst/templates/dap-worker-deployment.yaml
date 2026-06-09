@@ -5,7 +5,7 @@ metadata:
   labels:
     app: catalyst-dap-worker
 spec:
-  replicas: 1
+  replicas: {{ .Values.dapWorkerReplicaCount }}
   selector:
     matchLabels:
       app: catalyst-dap-worker
