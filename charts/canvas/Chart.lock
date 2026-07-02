@@ -4,6 +4,6 @@ dependencies:
   version: 2.1.2
 - name: canvas-rce-api
   repository: file://../canvas-rce-api
-  version: 3.1.1
-digest: sha256:34795701af5aedc0f4e00cb8d5b22944daa925a684bbed78df32978001df994a
-generated: "2025-10-31T10:42:25.605591912-07:00"
+  version: 3.2.0
+digest: sha256:30c9e9fc190180ec1ad8730fca771efc229ba7a79f0f35db8e5a52d07a656c0f
+generated: "2026-07-02T18:24:55.325987206-04:00"
