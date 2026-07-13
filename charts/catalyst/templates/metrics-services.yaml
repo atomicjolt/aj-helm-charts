@@ -25,3 +25,17 @@ spec:
   ports:
   - name: metrics
     port: 4080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalyst-dap-workers
+  labels:
+    metrics: catalyst
+spec:
+  selector:
+    app: catalyst-dap-worker
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 4080

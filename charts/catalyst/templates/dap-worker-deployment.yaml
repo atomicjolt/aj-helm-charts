@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalyst-dap-worker
+  labels:
+    app: catalyst-dap-worker
+spec:
+  replicas: {{ .Values.dapWorkerReplicaCount }}
+  selector:
+    matchLabels:
+      app: catalyst-dap-worker
+  template:
+    metadata:
+      labels:
+        app: catalyst-dap-worker
+        cluster: catalyst-workers
+{{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+      - name: catalyst
+        image: {{ .Values.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: REPLACE_OS_VARS
+            value: "true"
+          - name: ERLANG_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+          - name: "shared-storage"
+            mountPath: /shared
+        resources:
+{{ .Values.dapWorkerResources | toYaml | indent 10 }}
+{{ if .Values.dapWorkerAffinity }}
+        {{- with .Values.dapWorkerAffinity }}
+        affinity:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+{{ end }}
+      initContainers:
+      - name: check-migrations
+        image: {{ .Values.image }}
+        imagePullPolicy: IfNotPresent
+        command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.check_migrations(nil)"]
+        env:
+        - name: REPLACE_OS_VARS
+          value: "true"
+        - name: ERLANG_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/catalyst
+      terminationGracePeriodSeconds: 60
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "2"
+      volumes:
+      - name: config-volume
+        projected:
+          sources:
+          - secret:
+              name: catalyst-config
+          - configMap:
+              name: catalyst-dap-worker-config
+      - name: "shared-storage"
+        persistentVolumeClaim:
+          claimName: "shared-storage"

@@ -9,5 +9,7 @@ data:
     run_slow_jobs = true
     run_regular_jobs = false
     run_substitution_processor = true
+    run_live_event_promoter = true
     connect_cluster = true
     collect_db_metrics = true
+
