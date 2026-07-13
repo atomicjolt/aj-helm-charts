@@ -556,6 +556,21 @@ entries:
   catalyst-chart:
   - apiVersion: v2
     appVersion: 1.17.0
+    created: "2026-07-13T14:54:36.014380947Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: Run catalyst web and worker instances
+    digest: 691c10e3c06c8f7b86745d940e023812915f56f502f38d8911bee4a042ae984d
+    name: catalyst-chart
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/catalyst-chart-2.6.0/catalyst-chart-2.6.0.tgz
+    version: 2.6.0
+  - apiVersion: v2
+    appVersion: 1.17.0
     created: "2026-07-06T15:36:36.413456122Z"
     dependencies:
     - condition: redis.enabled
@@ -790,4 +805,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-06T15:36:36.413585392Z"
+generated: "2026-07-13T14:54:36.01453772Z"
