@@ -17,7 +17,7 @@ spec:
           serviceAccountName: {{ $top.Values.serviceAccount.name }}
           containers:
           - name: catalyst
-            image: {{ $top.Values.image }}
+            image: "{{ $top.Values.image.repository }}:{{ $top.Values.image.tag }}"
             imagePullPolicy: IfNotPresent
             command: ["/opt/catalyst/bin/catalyst", "eval", "{{ $cronjob.command }}"]
             env:
