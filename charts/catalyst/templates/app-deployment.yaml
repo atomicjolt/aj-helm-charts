@@ -24,12 +24,14 @@ spec:
     metadata:
       labels:
         app: catalyst-app
+{{- if .Values.elasticsearchWhitelistLabels }}
 {{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
+{{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
       - name: catalyst
-        image: {{ .Values.image }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -61,7 +63,7 @@ spec:
 {{ .Values.appResources | toYaml | indent 10 }}
       initContainers:
       - name: check-migrations
-        image: {{ .Values.image }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.check_migrations(nil)"]
         env:

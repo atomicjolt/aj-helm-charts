@@ -1,3 +1,9 @@
+# Container image for all Catalyst deployments (app, worker, lead-worker),
+# migrations, and cronjobs.
+image:
+  repository: ""
+  tag: ""
+
 elasticsearchWhitelistLabels: {}
 
 dapWorkerReplicaCount: 1

@@ -15,7 +15,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: migrations
-        image: {{ .Values.image }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.migrate(nil)"]
         volumeMounts:

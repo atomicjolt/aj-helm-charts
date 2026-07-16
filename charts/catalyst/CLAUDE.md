@@ -36,7 +36,7 @@ helm template my-release . -f my-values.yaml --debug
 
 ## Architecture: Deployment Types
 
-All three deployments run the same container image (`.Values.image`) but are differentiated by their ConfigMap-injected `specific.toml`, which controls which Catalyst subsystems activate.
+All three deployments run the same container image (`.Values.image.repository`:`.Values.image.tag`, tag defaulting to `.Chart.AppVersion`) but are differentiated by their ConfigMap-injected `specific.toml`, which controls which Catalyst subsystems activate.
 
 | Deployment | Config | Scheduler | Regular jobs | Slow jobs | Phoenix endpoints |
 |---|---|---|---|---|---|
@@ -81,7 +81,7 @@ When `scheduledScaling.enabled: true`, the chart creates CronJobs that use `kube
 ## Key Values
 
 Required values that have no defaults and must be provided:
-- `image` — container image for all Catalyst deployments
+- `image.repository` — container image repository for all Catalyst deployments (`image.tag` is optional and defaults to the chart `appVersion`)
 - `hostname` — used in the ALB Ingress rule and TLS host
 - `appReplicaCount`, `workerReplicaCount` — replica counts
 - `appResources`, `workerResources`, `leadWorkerResources` — resource requests/limits

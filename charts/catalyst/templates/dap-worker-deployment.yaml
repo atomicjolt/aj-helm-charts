@@ -14,12 +14,14 @@ spec:
       labels:
         app: catalyst-dap-worker
         cluster: catalyst-workers
+{{- if .Values.elasticsearchWhitelistLabels }}
 {{ .Values.elasticsearchWhitelistLabels | toYaml | indent 8 }}
+{{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
       - name: catalyst
-        image: {{ .Values.image }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         env:
           - name: REPLACE_OS_VARS
@@ -43,7 +45,7 @@ spec:
 {{ end }}
       initContainers:
       - name: check-migrations
-        image: {{ .Values.image }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         command: ["/opt/catalyst/bin/catalyst", "eval", "Catalyst.ReleaseTasks.check_migrations(nil)"]
         env:
