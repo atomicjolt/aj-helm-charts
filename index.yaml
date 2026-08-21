@@ -782,6 +782,16 @@ entries:
   kube-release-notifier:
   - apiVersion: v2
     appVersion: latest
+    created: "2026-08-21T01:23:25.717834223Z"
+    description: A Helm chart for Kubernetes
+    digest: 08d54b86b3ec33c6eec6da051efb915bdb72d655264c30b7526841712bb5a3fc
+    name: kube-release-notifier
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-2.0.0/kube-release-notifier-2.0.0.tgz
+    version: 2.0.0
+  - apiVersion: v2
+    appVersion: latest
     created: "2026-07-02T22:37:46.399705994Z"
     description: A Helm chart for Kubernetes
     digest: bd5ca057a6a3653cfdf810901f2e694f4280ea2c89698ebddb5a64876bb6a215
@@ -820,4 +830,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-16T16:14:59.683028712Z"
+generated: "2026-08-21T01:23:25.717893709Z"
