@@ -169,6 +169,21 @@ entries:
   atomic-app:
   - apiVersion: v2
     appVersion: prod
+    created: "2026-10-22T21:51:06.46988568Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: A Helm chart for Atomic Rails Apps
+    digest: ef716d6eb40683e6c045e384056385a47bea568f3a2038e8e6d8262d95bcdc9e
+    name: atomic-app
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-app-3.3.1/atomic-app-3.3.1.tgz
+    version: 3.3.1
+  - apiVersion: v2
+    appVersion: prod
     created: "2026-07-02T22:37:45.584434604Z"
     dependencies:
     - condition: redis.enabled
@@ -348,6 +363,21 @@ entries:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-app-2.5.1/atomic-app-2.5.1.tgz
     version: 2.5.1
   atomic-reactor:
+  - apiVersion: v2
+    appVersion: prod
+    created: "2026-10-22T21:51:06.655942091Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: A Helm chart for the Atomic Reactor Rust app
+    digest: 17c433711565d6089ea2d93b67de66726ea1b4a046bea30993e47af7297d8c88
+    name: atomic-reactor
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-reactor-0.2.1/atomic-reactor-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     appVersion: prod
     created: "2026-05-07T21:25:46.029302174Z"
@@ -830,4 +860,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-21T01:23:25.717893709Z"
+generated: "2026-10-22T21:51:06.659265005Z"
