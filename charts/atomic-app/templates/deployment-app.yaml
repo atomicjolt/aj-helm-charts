@@ -12,7 +12,7 @@ metadata:
     {{- if .Values.app.ajAppMonitoring.enabled }}
     {{- range $key, $value := .Values.app.ajAppMonitoring }}
     {{- if ne $key "enabled"}}
-    atomicjolt.com/release-notifier-{{ $key }}: {{ $value }}
+    atomicjolt.com/release-notifier-{{ $key }}: {{ $value | quote }}
     {{- end }}
     {{- end }}
     {{- end }}
