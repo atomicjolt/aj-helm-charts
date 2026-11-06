@@ -13,3 +13,4 @@ data:
 
     [catalyst]
     run_scheduler = false
+    panel_host = {{ required "panelHostname is required" .Values.panelHostname | quote }}

@@ -19,10 +19,22 @@ spec:
   tls:
   - hosts:
     - {{ .Values.hostname }}
+    - {{ required "panelHostname is required" .Values.panelHostname }}
     # not used in current deployment, but would be used by cert-manager
     secretName: catalyst-tls
   rules:
     - host: {{ .Values.hostname }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: catalyst-app-service
+              port:
+                number: 8080
+    # Admin panel (/panel) host. Catalyst 404s /panel on any other host.
+    - host: {{ .Values.panelHostname }}
       http:
         paths:
         - path: /

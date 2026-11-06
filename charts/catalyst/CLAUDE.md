@@ -83,6 +83,7 @@ When `scheduledScaling.enabled: true`, the chart creates CronJobs that use `kube
 Required values that have no defaults and must be provided:
 - `image.repository`, `image.tag` — container image repository and tag for all Catalyst deployments (both required; there is no `appVersion` fallback for `tag`)
 - `hostname` — used in the ALB Ingress rule and TLS host
+- `panelHostname` — host for the admin panel (`/panel`). Gets its own Ingress rule and TLS host, and is written to the app's `specific.toml` as `panel_host`; Catalyst 404s `/panel` on any other host
 - `appReplicaCount`, `workerReplicaCount` — replica counts
 - `appResources`, `workerResources`, `leadWorkerResources` — resource requests/limits
 - `appIngressClassName` — ingress class (e.g., `alb`)
