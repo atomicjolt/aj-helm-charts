@@ -19,6 +19,9 @@ spec:
   tls:
   - hosts:
     - {{ .Values.hostname }}
+    {{- if .Values.panelHostname }}
+    - {{ .Values.panelHostname }}
+    {{- end }}
     # not used in current deployment, but would be used by cert-manager
     secretName: catalyst-tls
   rules:
@@ -32,3 +35,16 @@ spec:
               name: catalyst-app-service
               port:
                 number: 8080
+    {{- if .Values.panelHostname }}
+    # Admin panel (/panel) host. Catalyst 404s /panel on any other host.
+    - host: {{ .Values.panelHostname }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: catalyst-app-service
+              port:
+                number: 8080
+    {{- end }}

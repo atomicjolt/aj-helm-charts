@@ -87,4 +87,7 @@ Required values that have no defaults and must be provided:
 - `appResources`, `workerResources`, `leadWorkerResources` — resource requests/limits
 - `appIngressClassName` — ingress class (e.g., `alb`)
 
+Optional:
+- `panelHostname` — host for the admin panel (`/panel`). When set, it gets its own Ingress rule and TLS host and is written to the app's `specific.toml` as `panel_host`, and Catalyst 404s `/panel` on any other host. The ALB controller discovers certs for every TLS host, so only set it once an ACM cert covering it exists in that region, or the ingress fails to reconcile.
+
 The `catalyst-config` Secret must exist before install unless `externalSecrets.config.enabled: true` (which creates it via the External Secrets Operator as a pre-install hook).

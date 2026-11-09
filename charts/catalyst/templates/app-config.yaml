@@ -13,3 +13,6 @@ data:
 
     [catalyst]
     run_scheduler = false
+    {{- if .Values.panelHostname }}
+    panel_host = {{ .Values.panelHostname | quote }}
+    {{- end }}
