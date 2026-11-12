@@ -17,6 +17,21 @@ configSecret: ""
 # This is useful with the RLS multi-tenancy setup, where migrations run as a different user.
 # migrationConfigSecret: ""
 credentialsSecret: ""
+
+# Mount application config files at /app/config/k8s, merged with configSecret
+# (if set). Each entry in files becomes one file named by its key. When files is
+# empty, an existing ConfigMap named configMapName is mounted instead. The config
+# files and the secret must not share any filenames; duplicates prevent pods
+# from starting.
+appConfig:
+  enabled: false
+  # Defaults to <release>-app-config
+  configMapName: ""
+  files: {}
+  # files:
+  #   app_settings.yml: |
+  #     production:
+  #       application_name: "My App"
 app:
   replicaCount: 1
   pumaThreads: 5:5

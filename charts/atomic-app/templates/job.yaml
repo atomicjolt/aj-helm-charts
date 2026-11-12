@@ -49,9 +49,7 @@ spec:
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
       volumes:
-        - name: secrets
-          secret:
-            secretName: {{ .Values.migrationConfigSecret | default .Values.configSecret }}
+        {{- include "app.configVolume" (dict "root" $ "secretName" (.Values.migrationConfigSecret | default .Values.configSecret)) | nindent 8 }}
         - name: credentials
           secret:
             secretName: {{ .Values.credentialsSecret }}
