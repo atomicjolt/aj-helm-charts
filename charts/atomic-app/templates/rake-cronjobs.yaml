@@ -47,9 +47,7 @@ spec:
                 mountPath: /shared
               {{- end }}
           volumes:
-            - name: secrets
-              secret:
-                secretName: {{ $top.Values.configSecret }}
+            {{- include "app.configVolume" (dict "root" $top "secretName" $top.Values.configSecret) | nindent 12 }}
             - name: credentials
               secret:
                 secretName: {{ $top.Values.credentialsSecret }}

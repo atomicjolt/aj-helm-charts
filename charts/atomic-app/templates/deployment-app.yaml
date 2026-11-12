@@ -31,6 +31,9 @@ spec:
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with include "app.appConfigChecksum" . }}
+        {{- . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         type: app
@@ -111,9 +114,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
-        - name: secrets
-          secret:
-            secretName: {{ .Values.configSecret }}
+        {{- include "app.configVolume" (dict "root" $ "secretName" .Values.configSecret) | nindent 8 }}
         - name: credentials
           secret:
             secretName: {{ .Values.credentialsSecret }}

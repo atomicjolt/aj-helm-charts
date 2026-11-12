@@ -60,3 +60,42 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Name of the app settings ConfigMap mounted when appConfig.enabled is true.
+*/}}
+{{- define "app.appConfigMapName" -}}
+{{- .Values.appConfig.configMapName | default (printf "%s-app-config" .Release.Name) }}
+{{- end }}
+
+{{/*
+Pod annotation that rolls pods when the chart-managed config files change.
+*/}}
+{{- define "app.appConfigChecksum" -}}
+{{- if and .Values.appConfig.enabled .Values.appConfig.files -}}
+checksum/app-config: {{ toJson .Values.appConfig.files | sha256sum }}
+{{- end }}
+{{- end }}
+
+{{/*
+The "secrets" volume mounted at /app/config/k8s.
+Without appConfig it is the plain config secret; with appConfig it is a
+projected volume merging the secret (if any) and the app settings ConfigMap.
+Params: root (top-level context), secretName
+*/}}
+{{- define "app.configVolume" -}}
+- name: secrets
+{{- if .root.Values.appConfig.enabled }}
+  projected:
+    sources:
+      {{- if .secretName }}
+      - secret:
+          name: {{ .secretName }}
+      {{- end }}
+      - configMap:
+          name: {{ include "app.appConfigMapName" .root }}
+{{- else }}
+  secret:
+    secretName: {{ .secretName }}
+{{- end }}
+{{- end }}
