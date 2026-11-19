@@ -12,6 +12,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# Number of old ReplicaSets to keep for rollback on the app and worker deployments
+revisionHistoryLimit: 2
+
 configSecret: ""
 # Set this value if you want to use a different set of secrets for the migration job.
 # This is useful with the RLS multi-tenancy setup, where migrations run as a different user.
