@@ -169,6 +169,21 @@ entries:
   atomic-app:
   - apiVersion: v2
     appVersion: prod
+    created: "2026-11-19T19:37:58.221155969Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 2.1.2
+    description: A Helm chart for Atomic Rails Apps
+    digest: e6b196848672dc03455c6946d3a62821b38f3bd57422895ef59c45b5e2da542b
+    name: atomic-app
+    type: application
+    urls:
+    - https://github.com/atomicjolt/aj-helm-charts/releases/download/atomic-app-3.4.1/atomic-app-3.4.1.tgz
+    version: 3.4.1
+  - apiVersion: v2
+    appVersion: prod
     created: "2026-11-12T21:52:16.356185112Z"
     dependencies:
     - condition: redis.enabled
@@ -890,4 +905,4 @@ entries:
     urls:
     - https://github.com/atomicjolt/aj-helm-charts/releases/download/kube-release-notifier-0.1.0/kube-release-notifier-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-12T21:52:16.356274598Z"
+generated: "2026-11-19T19:37:58.221221889Z"
